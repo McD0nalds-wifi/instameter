@@ -8,28 +8,34 @@
 
 ## Справочник
 
-Статика в бандле, версионируется вместе с приложением. Типы выводятся из схем valibot,
-схемы лежат в `entities/camera` и `entities/film` (появятся вместе с каталогом).
+Статика в бандле, версионируется вместе с приложением. Схемы valibot — в
+`src/entities/camera/model/cameraSpec.ts` и `src/entities/film/model/filmSpec.ts`, типы выводятся
+из них через `v.InferOutput`. Общие примитивы (положительное число, slug, URL) — в
+`shared/lib/schema`. Данные каталога и их происхождение — `catalog.md`.
 
 ```ts
-interface FilmSpec {
+type FilmSpec = {
   id: string;
   name: string;
   iso: number;
   frameSize: [number, number];
-  latitudeStops: number;
-}
+  latitudeStops: number | null;
+  sourceUrl?: string;
+};
 
 type ShutterRange =
   | { kind: 'program'; fastest: number; slowest: number }
   | { kind: 'fixed'; values: number[] }
-  | { kind: 'bulb' };
+  | { kind: 'bulb'; maxSeconds?: number };
 
-interface CameraSpec {
+type DistanceRange = { min: number; max: number | null };
+
+type CameraSpec = {
   id: string;
   brand: string;
   model: string;
   filmIds: string[];
+  focalLength: number;
   apertures: number[];
   effectiveAperture?: number;
   shutter: ShutterRange[];
@@ -38,22 +44,38 @@ interface CameraSpec {
     canDisable: boolean;
     guideNumber?: number;
     guideNumberIso?: number;
+    range?: DistanceRange;
   };
-  focusZones?: { label: string; min: number; max: number }[];
+  focusZones?: (DistanceRange & { label: string })[];
+  meteringRange?: { minLv: number; maxLv: number; iso: number };
   notes?: string;
-}
+  sourceUrl?: string;
+};
 ```
 
 Смысл полей:
 
-- `frameSize` — поле изображения в миллиметрах; `latitudeStops` — допустимое отклонение
-  экспозиции плёнки в ступенях в обе стороны.
+- `id` — slug из латиницы, цифр и дефисов: `lomo-instant-wide`.
+- `frameSize` — поле изображения в миллиметрах.
+- `latitudeStops` — допустимое отклонение экспозиции плёнки в ступенях в обе стороны.
+  `null` — производитель не указывает; сейчас так у всех плёнок.
+- `focalLength` — фактическое фокусное расстояние в миллиметрах. Эквивалент для порога смаза
+  движок считает сам по диагонали `frameSize`.
 - `apertures: []` значит «диафрагма не управляется», тогда фактическое значение лежит
-  в `effectiveAperture`.
-- `shutter` — режимы затвора, доступные одновременно; выдержки в секундах.
-- `exposureCompensation: []` — коррекции нет.
-- `guideNumber` в метрах, `guideNumberIso` — ISO, для которого оно указано. Оба поля
-  заводятся сразу, даже если до FR-16 их никто не читает.
+  в `effectiveAperture`. Схема не пропускает камеру без того и другого.
+- `shutter` — режимы затвора, доступные одновременно; выдержки в секундах. У `program`
+  `fastest` строго меньше `slowest`.
+- `exposureCompensation` — доступные значения в ступенях, включая `0`; `[]` — коррекции нет.
+- `flash.guideNumber` в метрах, `guideNumberIso` — ISO, для которого оно указано. Если ISO
+  производитель не называет, поле отсутствует (Lomo). `flash.range` — рабочий диапазон
+  в метрах, как его дают Fujifilm.
+- `max: null` в дистанциях — бесконечность: JSON не умеет хранить `Infinity`.
+- `meteringRange` — рабочий диапазон автоматики в Lv при указанном ISO. Для пересчёта
+  в EV₁₀₀: `EV₁₀₀ = Lv − log₂(ISO / 100)`.
+- `sourceUrl` необязателен в схеме: камера, заведённая вручную (FR-05), источника не имеет.
+  Для каталога его наличие требует тест.
+
+Каталог хранится как `{ version, films }` и `{ version, cameras }`.
 
 ## Пользовательские сущности
 
@@ -104,7 +126,7 @@ interface Recommendation {
 ## Настройки приложения
 
 Хранилище `appSettings` — пары «ключ — значение». Каждая настройка — отдельная запись,
-у каждой своя схема valibot в `src/entities/preference`. Сейчас там одна настройка:
+у каждой своя схема valibot в `entities/preference`. Сейчас там одна настройка:
 
 | Ключ | Значение | По умолчанию |
 |---|---|---|

@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "films": [
+    {
+      "id": "instax-mini",
+      "name": "Fujifilm Instax Mini",
+      "iso": 800,
+      "frameSize": [
+        62,
+        46
+      ],
+      "latitudeStops": null,
+      "sourceUrl": "https://www.fujifilm.com/us/en/consumer/instax/film/mini"
+    },
+    {
+      "id": "instax-wide",
+      "name": "Fujifilm Instax Wide",
+      "iso": 800,
+      "frameSize": [
+        62,
+        99
+      ],
+      "latitudeStops": null,
+      "sourceUrl": "https://www.fujifilm.com/us/en/consumer/instax/film/wide/black"
+    },
+    {
+      "id": "polaroid-i-type",
+      "name": "Polaroid i-Type",
+      "iso": 640,
+      "frameSize": [
+        79,
+        77
+      ],
+      "latitudeStops": null,
+      "sourceUrl": "https://www.polaroid.com/en_us/products/color-itype-instant-film"
+    },
+    {
+      "id": "polaroid-600",
+      "name": "Polaroid 600",
+      "iso": 640,
+      "frameSize": [
+        79,
+        77
+      ],
+      "latitudeStops": null,
+      "sourceUrl": "https://www.polaroid.com/en_us/products/color-600-instant-film"
+    },
+    {
+      "id": "polaroid-sx-70",
+      "name": "Polaroid SX-70",
+      "iso": 160,
+      "frameSize": [
+        79,
+        77
+      ],
+      "latitudeStops": null,
+      "sourceUrl": "https://www.polaroid.com/en_us/products/color-sx70-instant-film"
+    }
+  ]
+}
