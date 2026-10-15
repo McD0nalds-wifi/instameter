@@ -1,0 +1,8 @@
+[
+  {
+    "name": "Начальный бандл (JS + CSS, gzip)",
+    "path": ["dist/assets/index-*.js", "dist/assets/index-*.css"],
+    "limit": "200 kB",
+    "gzip": true
+  }
+]

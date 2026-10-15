@@ -1,0 +1,53 @@
+# Стили, тема и UI-кит
+
+## Основа
+
+HeroUI v3 поверх Tailwind v4. Точка входа стилей — `src/app/styles/index.css`:
+подключает Tailwind и `@heroui/styles`, задаёт системный шрифт и утилиты safe-area.
+Внешних шрифтов и CDN нет: сеть в рантайме запрещена, а системный шрифт бесплатен
+по бюджету и хорошо читается на солнце.
+
+## Правила
+
+- **Стили — Tailwind-классами в JSX.** CSS Modules и inline `style={{}}` не используются.
+  Повторяющийся набор классов выносится в компонент, а не в `@apply`.
+- **Цвета — только токены темы HeroUI**: `bg-background`, `text-foreground`, `text-muted`,
+  `text-accent`, `border-separator`, `bg-surface`, `text-danger`, `bg-warning-soft` и т. д.
+  Полный список — переменные `--color-*` в `@heroui/styles`. Без токенов тёмная тема
+  и контраст на солнце разваливаются.
+- **Произвольные значения запрещены**: `bg-[#fff]`, `w-[37px]`, `pb-[env(...)]`. Цвета
+  палитры Tailwind (`bg-red-500`, `text-slate-700`) тоже. Оба запрета проверяет ESLint
+  (`better-tailwindcss/no-restricted-classes`). Нужна новая утилита — она объявляется через
+  `@utility` в `index.css`, как `pt-safe` и `pb-safe`.
+- **Неизвестные классы — ошибка** (`better-tailwindcss/no-unknown-classes`): опечатка в классе
+  не проходит линт.
+- **Порядок классов** выравнивает Prettier (`prettier-plugin-tailwindcss`), руками не сортируем.
+- **Текст — через Typography HeroUI** (`Heading`, `Paragraph`, `Typography`), а не сырыми
+  `<p>`/`<span>`/`<h1>`. Так размеры и межстрочные интервалы едины.
+- **Иконки — lucide-react** поштучным импортом, с `aria-hidden`, если рядом есть подпись.
+- **Цели нажатия — от 44 пунктов** (`min-h-11` и больше). Приложением пользуются одной рукой
+  на улице.
+- **Ни одно решение не передаётся только цветом**: рядом с цветом всегда текст или иконка.
+
+## Компоненты HeroUI
+
+Компоненты импортируются из `@heroui/react` по имени, кит поддерживает tree-shaking.
+Провайдер не нужен. API составной (`Alert.Title`, `Alert.Description`), события —
+в стиле React Aria (`onPress`, а не `onClick`; `onSelectionChange` с `Selection`).
+
+Бюджет начального бандла — 200 КБ gzip, пустой каркас уже занимает около 151 КБ, львиная
+доля — HeroUI и React Aria. Перед добавлением тяжёлого компонента (календарь, таблица,
+color picker) смотреть на `yarn size`.
+
+## Тема
+
+Пользователь выбирает `system`, `light` или `dark` (`features/switchTheme`). Выбор хранится
+в `appSettings`, применяет его слой `app`:
+
+- до первого рендера — в `bootstrap`, чтобы не было вспышки светлой темы;
+- дальше — хуком `useThemeSync`, который слушает атом и `prefers-color-scheme`.
+
+Применение — атрибут `data-theme="light" | "dark"` и `color-scheme` на `<html>`. Режим
+`system` разворачивается в конкретную тему в коде: тёмные переменные HeroUI включаются только
+по `.dark` или `data-theme="dark"`, а не по медиазапросу. Вариант Tailwind `dark:` работает
+по тем же атрибутам.
