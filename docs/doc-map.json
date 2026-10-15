@@ -5,9 +5,10 @@
       "path": "docs/architecture.md",
       "title": "Архитектура и стек",
       "codePaths": [
-        "src/app/model/**"
+        "src/app/model/**",
+        "src/entities/preference/**"
       ],
-      "sha": "18365e12",
+      "sha": "fe1a8948",
       "summary": "Стек и FSD-раскладка проекта, IndexedDB как источник правды и Jotai как кэш, гидратация до первого рендера, base path из VITE_BASE, тема, строки интерфейса.",
       "keywords": [
         "архитектура",
@@ -25,19 +26,26 @@
     },
     {
       "path": "docs/catalog.md",
-      "title": "Каталог камер",
-      "codePaths": [],
-      "sha": "12df3f77",
-      "summary": "Справочник камер первой версии: шесть моделей с плёнкой, диафрагмой, выдержкой, коррекцией и вспышкой, версия каталога, источники спеков.",
+      "title": "Каталог камер и плёнок",
+      "codePaths": [
+        "src/entities/camera/config/**",
+        "src/entities/film/**",
+        "src/entities/film/config/**"
+      ],
+      "sha": "a7241892",
+      "summary": "Каталог камер и плёнок: где лежат JSON и схемы, сверенные спеки шести камер и пяти плёнок, раскладка спек по полям, отличия от SDLC (Lomo Wide 1/250), версия каталога, источники.",
       "keywords": [
         "каталог",
         "камеры",
+        "плёнки",
         "спеки",
         "instax",
         "lomo",
         "polaroid",
-        "плёнка",
-        "источники"
+        "json",
+        "источники",
+        "sourceUrl",
+        "@x"
       ]
     },
     {
@@ -60,21 +68,24 @@
       "path": "docs/data-model.md",
       "title": "Модель данных и хранилище",
       "codePaths": [
-        "src/entities/preference/**",
+        "src/entities/camera/model/**",
+        "src/entities/film/model/**",
         "src/shared/api/db/**"
       ],
-      "sha": "221e7e40",
-      "summary": "Типы CameraSpec, FilmSpec, UserCamera, Measurement, Recommendation; настройки appSettings; схема хранилищ IndexedDB, версии и аддитивные миграции, валидация valibot при чтении.",
+      "sha": "5703e0d8",
+      "summary": "Типы CameraSpec и FilmSpec со смыслом полей (focalLength, flash.range, meteringRange, latitudeStops null), UserCamera, Measurement, Recommendation; appSettings; схема IndexedDB, миграции, валидация valibot при чтении.",
       "keywords": [
         "модель данных",
         "типы",
+        "схема",
+        "valibot",
+        "CameraSpec",
+        "FilmSpec",
         "indexeddb",
         "idb",
         "миграции",
-        "схема",
         "appSettings",
         "userCameras",
-        "valibot",
         "валидация"
       ]
     },
@@ -105,8 +116,8 @@
       "path": "docs/exposure-engine.md",
       "title": "Движок рекомендаций",
       "codePaths": [],
-      "sha": "1881e86a",
-      "summary": "Алгоритм совета: EV сцены из EXIF, предсказание выдержки с клампом, штрафная функция, вспышка по ведущему числу, классы управления камер, эталонная таблица прогона.",
+      "sha": "887afe16",
+      "summary": "Алгоритм совета: EV из EXIF, предсказание выдержки с клампом, штрафы, вспышка по ведущему числу, классы управления камер, эталонный прогон Lomo'Instant Wide с потолком 1/250.",
       "keywords": [
         "движок",
         "алгоритм",
@@ -118,7 +129,8 @@
         "экспокоррекция",
         "штрафы",
         "вспышка",
-        "recommend"
+        "recommend",
+        "эталон"
       ]
     },
     {
@@ -157,15 +169,17 @@
       "path": "docs/risks.md",
       "title": "Риски и открытые вопросы",
       "codePaths": [],
-      "sha": "f68908e5",
-      "summary": "Риски проекта с влиянием и способом снятия, открытые вопросы, требующие решения, и закрытые решения.",
+      "sha": "4064e24e",
+      "summary": "Риски проекта и способы их снятия; открытые вопросы (ISO ведущего числа Lomo, широта плёнок, дистанция для вспышки, активная камера, отключение вспышки Fujifilm, хостинг) и закрытые решения.",
       "keywords": [
         "риски",
         "открытые вопросы",
         "решения",
-        "калибровка",
         "ведущее число",
-        "хостинг"
+        "широта",
+        "калибровка",
+        "хостинг",
+        "nd-фильтр"
       ]
     },
     {

@@ -1,0 +1,308 @@
+{
+  "version": 1,
+  "cameras": [
+    {
+      "id": "lomo-instant-wide",
+      "brand": "Lomography",
+      "model": "Lomo'Instant Wide",
+      "filmIds": [
+        "instax-wide"
+      ],
+      "focalLength": 90,
+      "apertures": [
+        8,
+        22
+      ],
+      "shutter": [
+        {
+          "kind": "program",
+          "fastest": 0.004,
+          "slowest": 8
+        },
+        {
+          "kind": "fixed",
+          "values": [
+            0.03333333333333333
+          ]
+        },
+        {
+          "kind": "bulb"
+        }
+      ],
+      "exposureCompensation": [
+        -1,
+        0,
+        1
+      ],
+      "flash": {
+        "canDisable": true,
+        "guideNumber": 13
+      },
+      "focusZones": [
+        {
+          "label": "0,6 м",
+          "min": 0.6,
+          "max": 1
+        },
+        {
+          "label": "1–2 м",
+          "min": 1,
+          "max": 2
+        },
+        {
+          "label": "∞",
+          "min": 2,
+          "max": null
+        }
+      ],
+      "notes": "Резьба под фильтр 49 мм, синхроконтакт PC. Режим 1/30 рассчитан на вспышку и студийный свет. ISO, для которого указано ведущее число, производитель не называет.",
+      "sourceUrl": "https://microsites.lomography.com/lomo-instant-wide-camera/technical-information"
+    },
+    {
+      "id": "lomo-instant-automat",
+      "brand": "Lomography",
+      "model": "Lomo'Instant Automat",
+      "filmIds": [
+        "instax-mini"
+      ],
+      "focalLength": 60,
+      "apertures": [
+        8,
+        22
+      ],
+      "shutter": [
+        {
+          "kind": "program",
+          "fastest": 0.004,
+          "slowest": 8
+        },
+        {
+          "kind": "bulb",
+          "maxSeconds": 30
+        }
+      ],
+      "exposureCompensation": [
+        -1,
+        0,
+        1
+      ],
+      "flash": {
+        "canDisable": true,
+        "guideNumber": 9
+      },
+      "focusZones": [
+        {
+          "label": "0,6 м",
+          "min": 0.6,
+          "max": 1
+        },
+        {
+          "label": "1–2 м",
+          "min": 1,
+          "max": 2
+        },
+        {
+          "label": "∞",
+          "min": 2,
+          "max": null
+        }
+      ],
+      "notes": "Резьба под фильтр 43 мм. ISO, для которого указано ведущее число, производитель не называет.",
+      "sourceUrl": "https://microsites.lomography.com/lomo-instant-automat/technical/"
+    },
+    {
+      "id": "polaroid-i-2",
+      "brand": "Polaroid",
+      "model": "Polaroid I-2",
+      "filmIds": [
+        "polaroid-i-type",
+        "polaroid-600",
+        "polaroid-sx-70"
+      ],
+      "focalLength": 98,
+      "apertures": [
+        8,
+        11,
+        16,
+        22,
+        32,
+        45,
+        64
+      ],
+      "shutter": [
+        {
+          "kind": "program",
+          "fastest": 0.004,
+          "slowest": 30
+        },
+        {
+          "kind": "bulb",
+          "maxSeconds": 356400
+        }
+      ],
+      "exposureCompensation": [],
+      "flash": {
+        "canDisable": true,
+        "guideNumber": 20,
+        "guideNumberIso": 640
+      },
+      "focusZones": [
+        {
+          "label": "Автофокус",
+          "min": 0.4,
+          "max": null
+        }
+      ],
+      "notes": "Режимы: авто, приоритет диафрагмы, приоритет выдержки, ручной. Ведущее число выведено из «2,5 м при f/8» для плёнки ISO 640. Резьба под фильтр 49 мм, синхроконтакт.",
+      "sourceUrl": "https://support.polaroid.com/hc/article_attachments/13261628055954"
+    },
+    {
+      "id": "instax-mini-99",
+      "brand": "Fujifilm",
+      "model": "Instax Mini 99",
+      "filmIds": [
+        "instax-mini"
+      ],
+      "focalLength": 60,
+      "apertures": [],
+      "effectiveAperture": 12.7,
+      "shutter": [
+        {
+          "kind": "program",
+          "fastest": 0.0025,
+          "slowest": 1.8
+        },
+        {
+          "kind": "bulb",
+          "maxSeconds": 10
+        }
+      ],
+      "exposureCompensation": [
+        -1.6666666666666667,
+        -0.6666666666666666,
+        0,
+        0.6666666666666666,
+        1
+      ],
+      "flash": {
+        "canDisable": true,
+        "range": {
+          "min": 0.3,
+          "max": 2.7
+        }
+      },
+      "focusZones": [
+        {
+          "label": "0,3–0,6 м",
+          "min": 0.3,
+          "max": 0.6
+        },
+        {
+          "label": "0,6–3 м",
+          "min": 0.6,
+          "max": 3
+        },
+        {
+          "label": "3 м – ∞",
+          "min": 3,
+          "max": null
+        }
+      ],
+      "meteringRange": {
+        "minLv": 5,
+        "maxLv": 14.8,
+        "iso": 800
+      },
+      "sourceUrl": "https://www.fujifilm.com/us/en/consumer/instax/cameras/mini99/specifications"
+    },
+    {
+      "id": "instax-wide-400",
+      "brand": "Fujifilm",
+      "model": "Instax Wide 400",
+      "filmIds": [
+        "instax-wide"
+      ],
+      "focalLength": 95,
+      "apertures": [],
+      "effectiveAperture": 14,
+      "shutter": [
+        {
+          "kind": "program",
+          "fastest": 0.005,
+          "slowest": 0.015625
+        }
+      ],
+      "exposureCompensation": [],
+      "flash": {
+        "canDisable": false,
+        "range": {
+          "min": 0.9,
+          "max": 3
+        }
+      },
+      "focusZones": [
+        {
+          "label": "0,9–3 м",
+          "min": 0.9,
+          "max": 3
+        },
+        {
+          "label": "3 м – ∞",
+          "min": 3,
+          "max": null
+        }
+      ],
+      "meteringRange": {
+        "minLv": 10.5,
+        "maxLv": 15,
+        "iso": 800
+      },
+      "sourceUrl": "https://www.fujifilm.com/us/en/consumer/instax/cameras/wide400/specifications"
+    },
+    {
+      "id": "instax-mini-12",
+      "brand": "Fujifilm",
+      "model": "Instax Mini 12",
+      "filmIds": [
+        "instax-mini"
+      ],
+      "focalLength": 60,
+      "apertures": [],
+      "effectiveAperture": 12.7,
+      "shutter": [
+        {
+          "kind": "program",
+          "fastest": 0.004,
+          "slowest": 0.5
+        }
+      ],
+      "exposureCompensation": [],
+      "flash": {
+        "canDisable": false,
+        "range": {
+          "min": 0.3,
+          "max": 2.2
+        }
+      },
+      "focusZones": [
+        {
+          "label": "Крупный план",
+          "min": 0.3,
+          "max": 0.5
+        },
+        {
+          "label": "Обычный",
+          "min": 0.3,
+          "max": null
+        }
+      ],
+      "meteringRange": {
+        "minLv": 5,
+        "maxLv": 14.5,
+        "iso": 800
+      },
+      "notes": "Вспышка срабатывает на каждом кадре, на длинных выдержках — медленная синхронизация.",
+      "sourceUrl": "https://www.fujifilm.com/us/en/consumer/instax/cameras/mini12/specifications"
+    }
+  ]
+}
