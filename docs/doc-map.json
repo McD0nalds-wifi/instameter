@@ -95,11 +95,14 @@
       "codePaths": [
         "src/widgets/appShell/ui/updateBanner/**"
       ],
-      "sha": "26d7609d",
-      "summary": "Сборка и деплой статики, регистрация service worker и precache, обновление через плашку, манифест и иконки, ловушки base path и iOS, бюджет размера, разработка с телефона по HTTPS.",
+      "sha": "6a235126",
+      "summary": "Сборка и деплой статики, заблокированные мажоры зависимостей в Dependabot, регистрация service worker и precache, обновление через плашку, манифест и иконки, ловушки base path и iOS, бюджет размера, разработка с телефона по HTTPS.",
       "keywords": [
         "деплой",
         "сборка",
+        "dependabot",
+        "зависимости",
+        "мажоры",
         "pwa",
         "service worker",
         "workbox",
