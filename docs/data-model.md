@@ -79,19 +79,19 @@ type CameraSpec = {
 
 ## Пользовательские сущности
 
-Живут в IndexedDB. Ссылка на каталог хранится по `specId`, но камера, заведённая вручную,
+Живут в IndexedDB, код — `entities/userCamera`. Ссылка на каталог хранится по `specId`,
+спеку камера получает через `entities/camera/@x/userCamera`. Камера, заведённая вручную,
 несёт собственный слепок спеки — иначе удаление модели из каталога сломает чужие данные.
 
 ```ts
-interface UserCamera {
+type UserCamera = {
   id: string;
   specId: string | null;
   customSpec?: CameraSpec;
   nickname: string;
   loadedFilmId: string;
-  isActive: boolean;
   createdAt: number;
-}
+};
 
 interface Measurement {
   ev100: number;
@@ -125,12 +125,15 @@ interface Recommendation {
 ## Настройки приложения
 
 Хранилище `appSettings` — пары «ключ — значение». Каждая настройка — отдельная запись,
-у каждой своя схема valibot в `entities/preference`:
+у каждой своя схема valibot в сущности-владельце: тема и поправка — `entities/preference`,
+активная камера — `entities/userCamera`. Чтение и запись — общие `readSetting` и `writeSetting`
+из `shared/api`:
 
 | Ключ | Значение | По умолчанию |
 |---|---|---|
 | `themePreference` | `'system' \| 'light' \| 'dark'` | `'system'` |
 | `deviceCorrection` | число от −2 до +2, ступени | `0` |
+| `activeCameraId` | id камеры из `userCameras` или `null` | `null` |
 
 `deviceCorrection` — постоянная поправка устройства (`exposure-engine.md`, шаг 1). Значение
 вне диапазона при чтении отбрасывается к умолчанию. Экрана для неё пока нет: появится вместе
@@ -144,16 +147,18 @@ interface Recommendation {
 
 | Хранилище | Ключ | Индексы | Появляется |
 |---|---|---|---|
-| `userCameras` | `id` | — (см. ниже) | MVP |
+| `userCameras` | `id` | — | MVP |
 | `appSettings` | `key` | — | MVP |
 | `shots` | `id` | `at`, `cameraId` | v3 |
 | `shotPhotos` | `shotId` | — | v3 |
 | `calibration` | `cameraId` | — | v3 |
 
-Индекс `isActive` из SDLC в первой миграции не заведён: `boolean` не является допустимым
-ключом IndexedDB, и записи с таким значением в индекс просто не попадают. Варианты решения
-(хранить `activeCameraId` в `appSettings` или флаг числом `0/1`) — открытый вопрос в `risks.md`.
-Камер единицы, поэтому до решения активная ищется перебором в памяти.
+Флага `isActive` из SDLC нет: активная камера хранится одним ключом `activeCameraId`
+в `appSettings`. Так структура сама гарантирует, что активная камера одна, а индекс
+не нужен — `boolean` IndexedDB всё равно не индексирует. Если id не найден среди камер
+(камеру удалили в другой вкладке, битая запись), активной считается первая по `createdAt`.
+Добавленная камера сразу становится активной; при удалении активной активной становится
+первая оставшаяся.
 
 Фото отпечатков лежат в отдельном хранилище как Blob, чтобы чтение списка кадров не тянуло
 десятки мегабайт с диска.

@@ -8,8 +8,8 @@
         "src/app/model/**",
         "src/entities/preference/**"
       ],
-      "sha": "2b6628a2",
-      "summary": "Стек и FSD-раскладка (в том числе measurement, measureScene, lib/exif, lib/format), IndexedDB как источник правды и Jotai как кэш, гидратация до первого рендера, base path из VITE_BASE, тема, строки интерфейса.",
+      "sha": "ce341703",
+      "summary": "Стек и FSD-раскладка (measurement, userCamera, measureScene, addCamera, manageUserCamera, lib/exif, lib/format), IndexedDB как источник правды и Jotai как кэш, гидратация до первого рендера, base path, тема, строки интерфейса.",
       "keywords": [
         "архитектура",
         "стек",
@@ -22,7 +22,8 @@
         "vite_base",
         "роутинг",
         "wouter",
-        "preference"
+        "preference",
+        "userCamera"
       ]
     },
     {
@@ -73,8 +74,8 @@
         "src/entities/film/model/**",
         "src/shared/api/db/**"
       ],
-      "sha": "9c0c1124",
-      "summary": "Типы CameraSpec и FilmSpec со смыслом полей, UserCamera, Measurement (в памяти до v3), Recommendation; настройки appSettings (тема, deviceCorrection); схема IndexedDB, миграции, валидация valibot при чтении.",
+      "sha": "a91f2b70",
+      "summary": "Типы CameraSpec и FilmSpec со смыслом полей, UserCamera без isActive, Measurement (в памяти до v3), Recommendation; настройки appSettings (тема, deviceCorrection, activeCameraId) и общие readSetting/writeSetting; схема IndexedDB, миграции, валидация.",
       "keywords": [
         "модель данных",
         "типы",
@@ -82,6 +83,8 @@
         "valibot",
         "CameraSpec",
         "FilmSpec",
+        "UserCamera",
+        "activeCameraId",
         "Measurement",
         "indexeddb",
         "idb",
@@ -183,8 +186,8 @@
       "path": "docs/risks.md",
       "title": "Риски и открытые вопросы",
       "codePaths": [],
-      "sha": "f756b390",
-      "summary": "Риски проекта и способы их снятия; открытые вопросы (ISO ведущего числа Lomo, широта плёнок и умолчание движка, коррекция против смаза, дистанция для вспышки, активная камера, вспышка Fujifilm, хостинг) и закрытые решения.",
+      "sha": "1590317b",
+      "summary": "Риски проекта и способы их снятия; открытые вопросы (ISO ведущего числа Lomo, широта плёнок, коррекция против смаза, дистанция для вспышки, вспышка Fujifilm, контраст контролов HeroUI на солнце, хостинг) и закрытые решения.",
       "keywords": [
         "риски",
         "открытые вопросы",
@@ -194,6 +197,7 @@
         "калибровка",
         "хостинг",
         "штрафы",
+        "контраст",
         "nd-фильтр"
       ]
     },

@@ -4,9 +4,8 @@ import { atom } from 'jotai';
 
 import { DEFAULT_DEVICE_CORRECTION } from './deviceCorrection';
 import { DEFAULT_THEME_PREFERENCE } from './themePreference';
-import { writeSetting } from '../api/settingsRepository';
 
-import { appDbAtom } from '@/shared/api';
+import { appDbAtom, writeSetting } from '@/shared/api';
 
 export const themePreferenceAtom = atom<ThemePreference>(DEFAULT_THEME_PREFERENCE);
 

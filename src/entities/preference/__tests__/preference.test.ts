@@ -1,7 +1,6 @@
 import { createStore } from 'jotai';
 
 import { loadAppSettings } from '../api/loadAppSettings';
-import { writeSetting } from '../api/settingsRepository';
 import { resolveTheme } from '../lib/resolveTheme';
 import {
   deviceCorrectionAtom,
@@ -10,7 +9,7 @@ import {
   themePreferenceAtom,
 } from '../model/atoms';
 
-import { appDbAtom, openAppDb } from '@/shared/api';
+import { appDbAtom, openAppDb, writeSetting } from '@/shared/api';
 
 const openFreshDb = () => openAppDb(crypto.randomUUID());
 

@@ -1,13 +1,11 @@
-import type { AppDb } from '@/shared/api';
+import type { AppDb } from './appDb';
 import type { GenericSchema } from 'valibot';
 
 import * as v from 'valibot';
 
-export type SettingKey = 'themePreference' | 'deviceCorrection';
-
 export const readSetting = async <TValue>(
   db: AppDb,
-  key: SettingKey,
+  key: string,
   schema: GenericSchema<TValue>,
 ): Promise<TValue | undefined> => {
   const record = await db.get('appSettings', key);
@@ -24,6 +22,6 @@ export const readSetting = async <TValue>(
   return result.output.value;
 };
 
-export const writeSetting = async <TValue>(db: AppDb, key: SettingKey, value: TValue) => {
+export const writeSetting = async <TValue>(db: AppDb, key: string, value: TValue) => {
   await db.put('appSettings', { key, value });
 };

@@ -37,11 +37,31 @@ export const strings = {
   },
   catalogPage: {
     title: 'Каталог',
-    placeholder: 'Здесь появится справочник камер моментальной печати.',
+    description:
+      'Выберите свою камеру — приложение запомнит её и будет советовать настройки под неё.',
   },
   myCamerasPage: {
     title: 'Мои камеры',
-    placeholder: 'Здесь появится список ваших камер.',
+    emptyTitle: 'Камер пока нет',
+    emptyDescription: 'Добавьте камеру из каталога, чтобы получать советы по настройкам.',
+    addFromCatalog: 'Добавить из каталога',
+    addMore: 'Добавить ещё камеру',
+  },
+  cameraSpec: {
+    fixedAperture: 'фиксированная',
+    film: 'Плёнка',
+    aperture: 'Диафрагма',
+    shutter: 'Выдержка',
+  },
+  addCamera: {
+    add: 'Добавить',
+    added: 'Уже добавлена',
+  },
+  userCamera: {
+    active: 'Активная',
+    makeActive: 'Сделать активной',
+    loadedFilm: 'Заряжена',
+    remove: 'Удалить камеру',
   },
   settingsPage: {
     title: 'Настройки',
