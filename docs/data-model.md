@@ -102,7 +102,6 @@ interface Measurement {
     fNumber: number;
     iso: number;
     exposureBias?: number;
-    brightnessValue?: number;
   };
   sceneId?: string;
   at: number;
@@ -126,14 +125,20 @@ interface Recommendation {
 ## Настройки приложения
 
 Хранилище `appSettings` — пары «ключ — значение». Каждая настройка — отдельная запись,
-у каждой своя схема valibot в `entities/preference`. Сейчас там одна настройка:
+у каждой своя схема valibot в `entities/preference`:
 
 | Ключ | Значение | По умолчанию |
 |---|---|---|
 | `themePreference` | `'system' \| 'light' \| 'dark'` | `'system'` |
+| `deviceCorrection` | число от −2 до +2, ступени | `0` |
 
-Постоянная поправка устройства (см. `exposure-engine.md`) появится здесь же как настройка,
-а не константа в коде.
+`deviceCorrection` — постоянная поправка устройства (`exposure-engine.md`, шаг 1). Значение
+вне диапазона при чтении отбрасывается к умолчанию. Экрана для неё пока нет: появится вместе
+с калибровочной тройкой первого полевого теста.
+
+Замер (`Measurement`) в базе не хранится до лога кадров (v3): текущий замер живёт в атоме
+`currentMeasurementAtom` сущности `measurement` и пропадает при перезагрузке. Схема valibot
+у него уже есть — она понадобится, когда замер начнёт сохраняться.
 
 ## Схема хранилища
 

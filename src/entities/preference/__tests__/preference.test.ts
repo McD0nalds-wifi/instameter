@@ -3,7 +3,12 @@ import { createStore } from 'jotai';
 import { loadAppSettings } from '../api/loadAppSettings';
 import { writeSetting } from '../api/settingsRepository';
 import { resolveTheme } from '../lib/resolveTheme';
-import { saveThemePreferenceAtom, themePreferenceAtom } from '../model/atoms';
+import {
+  deviceCorrectionAtom,
+  saveDeviceCorrectionAtom,
+  saveThemePreferenceAtom,
+  themePreferenceAtom,
+} from '../model/atoms';
 
 import { appDbAtom, openAppDb } from '@/shared/api';
 
@@ -25,7 +30,10 @@ describe('loadAppSettings', () => {
   it('без сохранённых настроек отдаёт значения по умолчанию', async () => {
     const db = await openFreshDb();
 
-    await expect(loadAppSettings(db)).resolves.toEqual({ themePreference: 'system' });
+    await expect(loadAppSettings(db)).resolves.toEqual({
+      themePreference: 'system',
+      deviceCorrection: 0,
+    });
     db.close();
   });
 
@@ -34,7 +42,10 @@ describe('loadAppSettings', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
     await writeSetting(db, 'themePreference', 'sepia');
 
-    await expect(loadAppSettings(db)).resolves.toEqual({ themePreference: 'system' });
+    await expect(loadAppSettings(db)).resolves.toEqual({
+      themePreference: 'system',
+      deviceCorrection: 0,
+    });
     expect(warn).toHaveBeenCalledOnce();
 
     warn.mockRestore();
@@ -51,7 +62,10 @@ describe('saveThemePreferenceAtom', () => {
     await store.set(saveThemePreferenceAtom, 'dark');
 
     expect(store.get(themePreferenceAtom)).toBe('dark');
-    await expect(loadAppSettings(db)).resolves.toEqual({ themePreference: 'dark' });
+    await expect(loadAppSettings(db)).resolves.toEqual({
+      themePreference: 'dark',
+      deviceCorrection: 0,
+    });
     db.close();
   });
 
@@ -61,5 +75,36 @@ describe('saveThemePreferenceAtom', () => {
     await store.set(saveThemePreferenceAtom, 'light');
 
     expect(store.get(themePreferenceAtom)).toBe('light');
+  });
+});
+
+describe('saveDeviceCorrectionAtom', () => {
+  it('сохраняет поправку устройства и читает её при загрузке', async () => {
+    const db = await openFreshDb();
+    const store = createStore();
+    store.set(appDbAtom, db);
+
+    await store.set(saveDeviceCorrectionAtom, -0.5);
+
+    expect(store.get(deviceCorrectionAtom)).toBe(-0.5);
+    await expect(loadAppSettings(db)).resolves.toEqual({
+      themePreference: 'system',
+      deviceCorrection: -0.5,
+    });
+    db.close();
+  });
+
+  it('отбрасывает поправку вне допустимого диапазона', async () => {
+    const db = await openFreshDb();
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    await writeSetting(db, 'deviceCorrection', 5);
+
+    await expect(loadAppSettings(db)).resolves.toEqual({
+      themePreference: 'system',
+      deviceCorrection: 0,
+    });
+
+    warn.mockRestore();
+    db.close();
   });
 });
