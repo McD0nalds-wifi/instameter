@@ -41,7 +41,7 @@
         "src/entities/film/**",
         "src/entities/film/config/**"
       ],
-      "sha": "a7241892",
+      "sha": "87a4db05",
       "summary": "Каталог камер и плёнок: где лежат JSON и схемы, сверенные спеки шести камер и пяти плёнок, раскладка спек по полям, отличия от SDLC (Lomo Wide 1/250), версия каталога, источники.",
       "keywords": [
         "каталог",
@@ -54,7 +54,10 @@
         "json",
         "источники",
         "sourceUrl",
-        "@x"
+        "@x",
+        "filterThread",
+        "резьба",
+        "nd-фильтр"
       ]
     },
     {
@@ -81,7 +84,7 @@
         "src/entities/film/model/**",
         "src/shared/api/db/**"
       ],
-      "sha": "edee713f",
+      "sha": "b1e5e73b",
       "summary": "Типы CameraSpec и FilmSpec со смыслом полей, UserCamera без isActive, Measurement (в памяти до v3), Recommendation как результат движка; настройки appSettings (тема, deviceCorrection, activeCameraId); схема IndexedDB, миграции, валидация.",
       "keywords": [
         "модель данных",
@@ -101,7 +104,9 @@
         "deviceCorrection",
         "валидация",
         "installHintDismissed",
-        "степпер"
+        "степпер",
+        "filterThread",
+        "резьба"
       ]
     },
     {
@@ -144,7 +149,7 @@
         "src/shared/lib/exposure/**",
         "src/widgets/adviceCard/**"
       ],
-      "sha": "6ef85b61",
+      "sha": "5d469fd7",
       "summary": "Алгоритм совета и его реализация: чтение EXIF (exifr lite, статусы, ограничение iOS на снимки из браузера), EV с поправкой устройства, кламп выдержки, штрафы, вспышка, классы камер, эталонный прогон; API, решения, коды rationale и предупреждений; карточка совета.",
       "keywords": [
         "движок",
@@ -167,7 +172,10 @@
         "adviceAtom",
         "ios",
         "iphone",
-        "webkit"
+        "webkit",
+        "WarningContext",
+        "тексты предупреждений",
+        "действие"
       ]
     },
     {
@@ -235,10 +243,11 @@
       "path": "docs/styling.md",
       "title": "Стили, тема и UI-кит",
       "codePaths": [
-        "src/app/styles/**"
+        "src/app/styles/**",
+        "src/shared/config/**"
       ],
-      "sha": "f2449af6",
-      "summary": "Правила стилей: Tailwind-классы, токены HeroUI, запрет произвольных значений и палитры, Typography, иконки, цели нажатия; компоненты HeroUI и бюджет; применение темы.",
+      "sha": "9d3b2797",
+      "summary": "Правила стилей: Tailwind-классы, токены HeroUI, запреты, Typography, иконки, цели нажатия; компоненты HeroUI и бюджет; тема; тексты интерфейса — словарь терминов (снимок, кадр, коррекция, поправка телефона, ступень) и правила формулировок.",
       "keywords": [
         "стили",
         "tailwind",
@@ -249,7 +258,12 @@
         "typography",
         "иконки",
         "lucide",
-        "доступность"
+        "доступность",
+        "тексты",
+        "термины",
+        "копирайтинг",
+        "словарь",
+        "формулировки"
       ]
     },
     {

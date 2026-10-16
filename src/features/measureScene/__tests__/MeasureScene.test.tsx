@@ -91,7 +91,7 @@ describe('MeasureScene', () => {
       await user.upload(pickerInput, asFile(jpegWithoutExif(), 'image.jpg'));
 
       expect(await screen.findByText('iPhone не передал данные экспозиции')).toBeInTheDocument();
-      expect(screen.getByText(/iOS отдаёт без EXIF/)).toBeInTheDocument();
+      expect(screen.getByText(/не нажимайте «Снять фото»/)).toBeInTheDocument();
     });
   });
 });

@@ -10,7 +10,14 @@ export type AdviceState =
   | { kind: 'no-measurement' }
   | { kind: 'no-camera' }
   | { kind: 'unsupported-camera'; cameraName: string }
-  | { kind: 'ready'; cameraName: string; filmName: string; recommendation: Recommendation };
+  | {
+      kind: 'ready';
+      cameraName: string;
+      filmName: string;
+      recommendation: Recommendation;
+      filterThread?: number;
+      flashControllable: boolean;
+    };
 
 export const buildAdvice = (
   measurement: Measurement | null,
@@ -33,5 +40,7 @@ export const buildAdvice = (
     cameraName: camera.nickname,
     filmName: film.name,
     recommendation: recommend(measurement.ev100, spec, film),
+    filterThread: spec.filterThread,
+    flashControllable: spec.flash.canDisable,
   };
 };

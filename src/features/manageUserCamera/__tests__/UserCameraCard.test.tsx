@@ -29,7 +29,7 @@ describe('UserCameraCard', () => {
 
     expect(screen.getByRole('radio', { name: 'Polaroid i-Type' })).toBeChecked();
 
-    await user.click(screen.getByRole('button', { name: 'Сделать активной' }));
+    await user.click(screen.getByRole('button', { name: 'Советовать для неё' }));
     await user.click(screen.getByRole('radio', { name: 'Polaroid SX-70' }));
 
     expect(store.get(activeCameraAtom)?.id).toBe(polaroid.id);
@@ -40,11 +40,17 @@ describe('UserCameraCard', () => {
     const user = setupUser();
     const store = renderCard(lomo.id);
 
-    expect(screen.getByText('Активная')).toBeInTheDocument();
+    expect(screen.getByText('Советы для неё')).toBeInTheDocument();
     expect(screen.getByText(/Fujifilm Instax Wide/)).toBeInTheDocument();
     expect(screen.queryByRole('radio')).not.toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: "Удалить камеру Lomo'Instant Wide" }));
+
+    expect(store.get(userCamerasAtom)).toEqual([lomo, polaroid]);
+
+    await user.click(screen.getByRole('button', { name: 'Отмена' }));
+    await user.click(screen.getByRole('button', { name: "Удалить камеру Lomo'Instant Wide" }));
+    await user.click(screen.getByRole('button', { name: 'Удалить камеру' }));
 
     expect(store.get(userCamerasAtom)).toEqual([polaroid]);
   });

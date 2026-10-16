@@ -20,7 +20,7 @@ export const FilmSelector: FC<FilmSelectorProps> = ({ filmIds, selectedFilmId, o
 
   return (
     <RadioGroup value={selectedFilmId} onChange={handleChange} className="flex flex-col gap-1">
-      <Label>{strings.userCamera.loadedFilm}</Label>
+      <Label>{strings.userCamera.loadedFilmQuestion}</Label>
       {filmIds.map((filmId) => (
         <Radio key={filmId} value={filmId} className="flex min-h-11 flex-row items-center gap-3">
           <Radio.Control>

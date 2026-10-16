@@ -55,8 +55,9 @@
           "max": null
         }
       ],
-      "notes": "Резьба под фильтр 49 мм, синхроконтакт PC. Режим 1/30 рассчитан на вспышку и студийный свет. ISO, для которого указано ведущее число, производитель не называет.",
-      "sourceUrl": "https://microsites.lomography.com/lomo-instant-wide-camera/technical-information"
+      "notes": "Синхроконтакт PC. Режим 1/30 рассчитан на вспышку и студийный свет. ISO, для которого указано ведущее число, производитель не называет.",
+      "sourceUrl": "https://microsites.lomography.com/lomo-instant-wide-camera/technical-information",
+      "filterThread": 49
     },
     {
       "id": "lomo-instant-automat",
@@ -107,8 +108,9 @@
           "max": null
         }
       ],
-      "notes": "Резьба под фильтр 43 мм. ISO, для которого указано ведущее число, производитель не называет.",
-      "sourceUrl": "https://microsites.lomography.com/lomo-instant-automat/technical/"
+      "notes": "ISO, для которого указано ведущее число, производитель не называет.",
+      "sourceUrl": "https://microsites.lomography.com/lomo-instant-automat/technical/",
+      "filterThread": 43
     },
     {
       "id": "polaroid-i-2",
@@ -153,8 +155,9 @@
           "max": null
         }
       ],
-      "notes": "Режимы: авто, приоритет диафрагмы, приоритет выдержки, ручной. Ведущее число выведено из «2,5 м при f/8» для плёнки ISO 640. Резьба под фильтр 49 мм, синхроконтакт.",
-      "sourceUrl": "https://support.polaroid.com/hc/article_attachments/13261628055954"
+      "notes": "Режимы: авто, приоритет диафрагмы, приоритет выдержки, ручной. Ведущее число выведено из «2,5 м при f/8» для плёнки ISO 640. Есть синхроконтакт.",
+      "sourceUrl": "https://support.polaroid.com/hc/article_attachments/13261628055954",
+      "filterThread": 49
     },
     {
       "id": "instax-mini-99",

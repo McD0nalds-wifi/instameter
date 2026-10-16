@@ -30,14 +30,16 @@ describe('AdviceCard', () => {
 
     renderAdvice(store);
 
-    const card = screen.getByLabelText('Совет');
+    const card = screen.getByLabelText("Совет для Lomo'Instant Wide");
     expect(within(card).getByText("Lomo'Instant Wide")).toBeInTheDocument();
     expect(within(card).getByText('Fujifilm Instax Wide')).toBeInTheDocument();
     expect(within(card).getByText('f/22')).toBeInTheDocument();
     expect(within(card).getByText('1/250 с')).toBeInTheDocument();
-    expect(within(card).getByText(/самый слабый пересвет/)).toBeInTheDocument();
-    expect(within(card).getByText('Пересвет на 2,1 ступени')).toBeInTheDocument();
-    expect(within(card).getByText('Кадр, скорее всего, пропадёт')).toBeInTheDocument();
+    expect(within(card).getByText(/пересвечен меньше всего/)).toBeInTheDocument();
+    expect(within(card).getByText('Кадр выйдет светлее нормы на 2,1 ступени')).toBeInTheDocument();
+    expect(
+      within(card).getByText('Не снимайте: кадр почти наверняка выйдет белым'),
+    ).toBeInTheDocument();
   });
 
   it('без камеры предлагает открыть каталог', async () => {
@@ -55,7 +57,7 @@ describe('AdviceCard', () => {
 
     renderAdvice(store);
 
-    expect(screen.queryByLabelText('Совет')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText(/^Совет для/)).not.toBeInTheDocument();
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
   });
 });

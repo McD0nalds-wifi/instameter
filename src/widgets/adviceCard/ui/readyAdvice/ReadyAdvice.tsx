@@ -15,14 +15,18 @@ type ReadyAdviceProps = {
 };
 
 export const ReadyAdvice: FC<ReadyAdviceProps> = ({
-  advice: { cameraName, filmName, recommendation },
+  advice: { cameraName, filmName, recommendation, filterThread, flashControllable },
 }) => {
   const [, navigate] = useLocation();
   const openMyCameras = () => navigate(paths.myCameras);
-  const warnings = describeWarnings(recommendation.warnings);
+  const warnings = describeWarnings(recommendation.warnings, {
+    residualError: recommendation.residualError,
+    filterThread,
+    flashControllable,
+  });
 
   return (
-    <Card aria-label={strings.advice.title}>
+    <Card aria-label={`${strings.advice.title} для ${cameraName}`}>
       <Card.Header className="flex flex-row items-start justify-between gap-2">
         <div className="flex flex-col gap-1">
           <Card.Title>{cameraName}</Card.Title>

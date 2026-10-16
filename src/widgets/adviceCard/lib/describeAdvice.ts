@@ -16,11 +16,13 @@ export type WarningText = {
   description: string;
 };
 
+const NO_BREAK_SPACE = '\u00A0';
+
 const roundStops = (stops: number) => Math.round(stops * 10) / 10;
 
 export const describeStops = (stops: number): string => {
   const rounded = roundStops(Math.abs(stops));
-  return `${formatStops(rounded).replace('+', '')} ${pluralize(rounded, strings.advice.stops)}`;
+  return `${formatStops(rounded).replace('+', '')}${NO_BREAK_SPACE}${pluralize(rounded, strings.advice.stops)}`;
 };
 
 export const describeSettings = (recommendation: Recommendation): SettingRow[] => {
@@ -46,7 +48,15 @@ export const describeSettings = (recommendation: Recommendation): SettingRow[] =
 export const describeRationale = ({ rationale }: Recommendation): string =>
   strings.advice.rationale[rationale];
 
-const describeWarning = (warning: ExposureWarning): WarningText => {
+export type WarningContext = {
+  residualError: number;
+  filterThread?: number;
+  flashControllable: boolean;
+};
+
+const sentence = (...parts: (string | false | undefined)[]) => parts.filter(Boolean).join(' ');
+
+const describeWarning = (warning: ExposureWarning, context: WarningContext): WarningText => {
   const texts = strings.advice.warnings;
   const amount = describeStops(warning.stops);
 
@@ -55,24 +65,28 @@ const describeWarning = (warning: ExposureWarning): WarningText => {
       return {
         kind: warning.kind,
         tone: 'warning',
-        title: `${texts.shutterCeilingTitle} на ${amount}`,
-        description: texts.shutterCeilingDescription,
+        title: `${texts.tooBrightTitle} ${amount}`,
+        description: sentence(
+          texts.tooBrightDescription,
+          context.filterThread !== undefined &&
+            `${texts.ndFilter} ${context.filterThread}${NO_BREAK_SPACE}мм.`,
+        ),
       };
     }
     case 'shutter-floor': {
       return {
         kind: warning.kind,
         tone: 'warning',
-        title: `${texts.shutterFloorTitle} на ${amount}`,
-        description: texts.shutterFloorDescription,
+        title: `${texts.tooDarkTitle} ${amount}`,
+        description: context.flashControllable ? texts.tooDarkWithFlash : texts.tooDarkWithoutFlash,
       };
     }
     case 'beyond-latitude': {
       return {
         kind: warning.kind,
         tone: 'danger',
-        title: texts.beyondLatitudeTitle,
-        description: `${texts.beyondLatitudeDescription} ${amount}.`,
+        title: context.residualError > 0 ? texts.lostWhiteTitle : texts.lostDarkTitle,
+        description: sentence(`${texts.lostDescription} ${amount}.`, texts.lostAdvice),
       };
     }
     case 'blur-risk': {
@@ -80,19 +94,25 @@ const describeWarning = (warning: ExposureWarning): WarningText => {
         kind: warning.kind,
         tone: 'warning',
         title: texts.blurTitle,
-        description: `${texts.blurDescription} ${amount}.`,
+        description: sentence(`${texts.blurDescription} ${amount}.`, texts.blurAdvice),
       };
     }
     case 'outside-metering-range': {
+      const isBright = warning.stops > 0;
       return {
         kind: warning.kind,
         tone: 'warning',
-        title: warning.stops > 0 ? texts.tooBrightTitle : texts.tooDarkTitle,
-        description: `${warning.stops > 0 ? texts.outsideRangeBrighter : texts.outsideRangeDarker} ${amount}.`,
+        title: isBright ? texts.outsideBrightTitle : texts.outsideDarkTitle,
+        description: sentence(
+          `${isBright ? texts.outsideBrightDescription : texts.outsideDarkDescription} ${amount}.`,
+          isBright ? texts.outsideBrightAdvice : texts.outsideDarkAdvice,
+        ),
       };
     }
   }
 };
 
-export const describeWarnings = (warnings: ExposureWarning[]): WarningText[] =>
-  warnings.map(describeWarning);
+export const describeWarnings = (
+  warnings: ExposureWarning[],
+  context: WarningContext,
+): WarningText[] => warnings.map((warning) => describeWarning(warning, context));
