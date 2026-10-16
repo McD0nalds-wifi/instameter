@@ -4,6 +4,7 @@ import {
   equivalentFocalLength,
   handheldShutterLimit,
   predictExposure,
+  programAperture,
   programShutterRange,
   recommend,
 } from '../recommend';
@@ -168,5 +169,67 @@ describe('recommend: неподдерживаемая камера', () => {
     const bulbOnly = { ...lomoInstantWide, shutter: [{ kind: 'bulb' as const }] };
 
     expect(() => recommend(12, bulbOnly, instaxWide)).toThrow('программного режима');
+  });
+});
+
+describe('программная диафрагма', () => {
+  const lomoProgram: ExposureCamera = {
+    ...lomoInstantWide,
+    apertures: [],
+    programApertures: [8, 22],
+  };
+  const range = { fastest: 1 / 250, slowest: 8 };
+
+  it('держит самую открытую диафрагму, пока выдержка не упрётся в потолок', () => {
+    expect(programAperture(10, [22, 8], 0, 800, range)).toBe(8);
+    expect(programAperture(12, [8, 22], 0, 800, range)).toBe(22);
+    expect(programAperture(16, [8, 22], 0, 800, range)).toBe(22);
+  });
+
+  it.each([
+    { ev100: 16, aperture: 22, compensation: 0, shutter: 250, residual: 2.12 },
+    { ev100: 15, aperture: 22, compensation: 0, shutter: 250, residual: 1.12 },
+    { ev100: 13, aperture: 22, compensation: 0, shutter: 135, residual: 0 },
+    { ev100: 12, aperture: 22, compensation: 0, shutter: 68, residual: 0 },
+    { ev100: 10, aperture: 8, compensation: 0, shutter: 128, residual: 0 },
+    { ev100: 8, aperture: 8, compensation: -1, shutter: 64, residual: -1 },
+    { ev100: 6, aperture: 8, compensation: -1, shutter: 16, residual: -1 },
+  ])(
+    'Lomo’Instant Wide на EV₁₀₀ $ev100 сама выбирает f/$aperture, совет — коррекция $compensation',
+    ({ ev100, aperture, compensation, shutter, residual }) => {
+      const result = recommend(ev100, lomoProgram, instaxWide);
+
+      expect(result.aperture).toBeNull();
+      expect(result.predictedAperture).toBe(aperture);
+      expect(result.exposureCompensation).toBe(compensation);
+      expect(shutterDenominator(result.predictedShutter)).toBe(shutter);
+      expect(result.residualError).toBeCloseTo(residual, 2);
+    },
+  );
+});
+
+describe('вспышка Instax Mini 99 при коррекции', () => {
+  const mini99: ExposureCamera = {
+    focalLength: 60,
+    apertures: [],
+    effectiveAperture: 12.7,
+    shutter: [{ kind: 'program', fastest: 1 / 400, slowest: 1.8 }],
+    exposureCompensation: [-5 / 3, -2 / 3, 0, 2 / 3, 1],
+    flash: { canDisable: true, offOnlyAtZeroCompensation: true },
+  };
+
+  it('не советует выключить вспышку при ненулевой коррекции — только «Авто»', () => {
+    const result = recommend(9.8, mini99, instaxMini);
+
+    expect(result.exposureCompensation).toBeCloseTo(-2 / 3);
+    expect(result.blurStops).toBe(0);
+    expect(result.flash).toBe('camera-decides');
+  });
+
+  it('при нулевой коррекции вспышку выключить можно', () => {
+    expect(recommend(13, mini99, instaxMini)).toMatchObject({
+      exposureCompensation: 0,
+      flash: 'off',
+    });
   });
 });

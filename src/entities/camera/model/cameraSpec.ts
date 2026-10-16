@@ -58,6 +58,7 @@ const DistanceRangeSchema = v.pipe(v.object(distanceRangeEntries), checkDistance
 
 export const FlashSpecSchema = v.object({
   canDisable: v.boolean(),
+  offOnlyAtZeroCompensation: v.optional(v.boolean()),
   guideNumber: v.optional(positiveNumberSchema),
   guideNumberIso: v.optional(positiveIntegerSchema),
   range: v.optional(DistanceRangeSchema),
@@ -94,6 +95,7 @@ export const CameraSpecSchema = v.pipe(
     filmIds: v.pipe(v.array(slugSchema), v.minLength(1)),
     focalLength: positiveNumberSchema,
     apertures: v.array(positiveNumberSchema),
+    programApertures: v.optional(v.pipe(v.array(positiveNumberSchema), v.minLength(2))),
     effectiveAperture: v.optional(positiveNumberSchema),
     shutter: v.pipe(v.array(ShutterRangeSchema), v.minLength(1)),
     exposureCompensation: v.array(v.number()),
@@ -103,7 +105,14 @@ export const CameraSpecSchema = v.pipe(
     filterThread: v.optional(positiveNumberSchema),
     adviceMode: v.optional(v.picklist(['auto', 'aperture-priority'])),
     adviceReminders: v.optional(
-      v.array(v.picklist(['film-type-menu', 'ev-dial-zero', 'flash-resets-on'])),
+      v.array(
+        v.picklist([
+          'film-type-menu',
+          'ev-dial-zero',
+          'flash-resets-on',
+          'compensation-ambient-only',
+        ]),
+      ),
     ),
     compensationLabels: v.optional(
       v.array(v.object({ value: v.number(), label: nonEmptyStringSchema })),
@@ -112,8 +121,9 @@ export const CameraSpecSchema = v.pipe(
     sourceUrl: v.optional(urlSchema),
   }),
   v.check(
-    ({ apertures, effectiveAperture }) => apertures.length > 0 || effectiveAperture !== undefined,
-    'У камеры без выбора диафрагмы должна быть задана effectiveAperture',
+    ({ apertures, effectiveAperture, programApertures }) =>
+      apertures.length > 0 || effectiveAperture !== undefined || programApertures !== undefined,
+    'У камеры без выбора диафрагмы должна быть задана effectiveAperture или programApertures',
   ),
 );
 

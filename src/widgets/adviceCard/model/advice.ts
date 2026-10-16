@@ -21,6 +21,7 @@ export type AdviceState =
       adviceMode?: 'auto' | 'aperture-priority';
       flashRange?: { min: number; max: number | null };
       reminders?: NonNullable<CameraSpec['adviceReminders']>;
+      hasProgramAperture: boolean;
       compensationLabels?: NonNullable<CameraSpec['compensationLabels']>;
     };
 
@@ -50,6 +51,7 @@ export const buildAdvice = (
     adviceMode: spec.adviceMode,
     flashRange: spec.flash.range,
     reminders: spec.adviceReminders,
+    hasProgramAperture: spec.programApertures !== undefined,
     compensationLabels: spec.compensationLabels,
   };
 };

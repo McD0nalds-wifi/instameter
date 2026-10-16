@@ -26,7 +26,8 @@ export const describeStops = (stops: number): string => {
   return `${formatStops(rounded).replace('+', '')}${NO_BREAK_SPACE}${pluralize(rounded, strings.advice.stops)}`;
 };
 
-type AdviceReminder = 'film-type-menu' | 'ev-dial-zero' | 'flash-resets-on';
+type AdviceReminder =
+  'film-type-menu' | 'ev-dial-zero' | 'flash-resets-on' | 'compensation-ambient-only';
 
 export type AdviceContext = {
   recommendation: Recommendation;
@@ -34,6 +35,7 @@ export type AdviceContext = {
   adviceMode?: 'auto' | 'aperture-priority';
   flashRange?: { min: number; max: number | null };
   reminders?: AdviceReminder[];
+  hasProgramAperture?: boolean;
   compensationLabels?: { value: number; label: string }[];
 };
 
@@ -49,8 +51,15 @@ const describeCompensation = (
     : formatThirds(compensation);
 };
 
-const isReminderRelevant = (reminder: AdviceReminder, recommendation: Recommendation) =>
-  reminder !== 'flash-resets-on' || recommendation.flash === 'off';
+const isReminderRelevant = (reminder: AdviceReminder, recommendation: Recommendation) => {
+  if (reminder === 'flash-resets-on') {
+    return recommendation.flash === 'off';
+  }
+  if (reminder === 'compensation-ambient-only') {
+    return recommendation.flash === 'on' && (recommendation.exposureCompensation ?? 0) !== 0;
+  }
+  return true;
+};
 
 const distanceFormat = new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 1 });
 
@@ -80,7 +89,7 @@ export const describeSettings = ({
       value: describeCompensation(recommendation.exposureCompensation, compensationLabels),
     });
   }
-  if (flashControllable && recommendation.flash !== 'camera-decides') {
+  if (flashControllable) {
     rows.push({ label: settings.flash, value: flash[recommendation.flash] });
   }
   return rows;
@@ -100,7 +109,10 @@ const describeFlashNote = ({ flashControllable, flashRange }: AdviceContext) => 
 export const describeNotes = (context: AdviceContext): string[] => {
   const { notes, reminders } = strings.advice;
   const { recommendation } = context;
-  const shutter = `${notes.shutter} ${formatShutter(recommendation.predictedShutter)}, ${notes.shutterSuffix}`;
+  const shutterText = formatShutter(recommendation.predictedShutter);
+  const shutter = context.hasProgramAperture
+    ? `${notes.programExposure} ${formatAperture(recommendation.predictedAperture)} и ${shutterText}, ${notes.programExposureSuffix}`
+    : `${notes.shutter} ${shutterText}, ${notes.shutterSuffix}`;
   const reminderNotes = (context.reminders ?? [])
     .filter((reminder) => isReminderRelevant(reminder, recommendation))
     .map((reminder) => reminders[reminder]);

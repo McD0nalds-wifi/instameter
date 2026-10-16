@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "cameras": [
     {
       "id": "lomo-instant-wide",
@@ -9,10 +9,7 @@
         "instax-wide"
       ],
       "focalLength": 90,
-      "apertures": [
-        8,
-        22
-      ],
+      "apertures": [],
       "shutter": [
         {
           "kind": "program",
@@ -60,7 +57,12 @@
       "filterThread": 49,
       "adviceMode": "auto",
       "adviceReminders": [
-        "flash-resets-on"
+        "flash-resets-on",
+        "compensation-ambient-only"
+      ],
+      "programApertures": [
+        8,
+        22
       ]
     },
     {
@@ -71,10 +73,7 @@
         "instax-mini"
       ],
       "focalLength": 60,
-      "apertures": [
-        8,
-        22
-      ],
+      "apertures": [],
       "shutter": [
         {
           "kind": "program",
@@ -117,7 +116,12 @@
       "filterThread": 43,
       "adviceMode": "auto",
       "adviceReminders": [
-        "flash-resets-on"
+        "flash-resets-on",
+        "compensation-ambient-only"
+      ],
+      "programApertures": [
+        8,
+        22
       ]
     },
     {
@@ -205,7 +209,8 @@
         "range": {
           "min": 0.3,
           "max": 2.7
-        }
+        },
+        "offOnlyAtZeroCompensation": true
       },
       "focusZones": [
         {
