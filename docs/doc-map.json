@@ -8,8 +8,8 @@
         "src/app/model/**",
         "src/entities/preference/**"
       ],
-      "sha": "ce341703",
-      "summary": "Стек и FSD-раскладка (measurement, userCamera, measureScene, addCamera, manageUserCamera, lib/exif, lib/format), IndexedDB как источник правды и Jotai как кэш, гидратация до первого рендера, base path, тема, строки интерфейса.",
+      "sha": "5b0b5653",
+      "summary": "Стек и FSD-раскладка (measurement, userCamera, measureScene, addCamera, manageUserCamera, adviceCard, lib/exif, lib/format), IndexedDB как источник правды и Jotai как кэш, гидратация, base path, тема, строки интерфейса.",
       "keywords": [
         "архитектура",
         "стек",
@@ -23,7 +23,8 @@
         "роутинг",
         "wouter",
         "preference",
-        "userCamera"
+        "userCamera",
+        "adviceCard"
       ]
     },
     {
@@ -74,8 +75,8 @@
         "src/entities/film/model/**",
         "src/shared/api/db/**"
       ],
-      "sha": "a91f2b70",
-      "summary": "Типы CameraSpec и FilmSpec со смыслом полей, UserCamera без isActive, Measurement (в памяти до v3), Recommendation; настройки appSettings (тема, deviceCorrection, activeCameraId) и общие readSetting/writeSetting; схема IndexedDB, миграции, валидация.",
+      "sha": "3e4120e5",
+      "summary": "Типы CameraSpec и FilmSpec со смыслом полей, UserCamera без isActive, Measurement (в памяти до v3), Recommendation как результат движка; настройки appSettings (тема, deviceCorrection, activeCameraId); схема IndexedDB, миграции, валидация.",
       "keywords": [
         "модель данных",
         "типы",
@@ -86,6 +87,7 @@
         "UserCamera",
         "activeCameraId",
         "Measurement",
+        "Recommendation",
         "indexeddb",
         "idb",
         "миграции",
@@ -126,17 +128,17 @@
       "codePaths": [
         "src/shared/lib/exif/**",
         "src/shared/lib/exposure/__tests__/**",
-        "src/shared/lib/exposure/**"
+        "src/shared/lib/exposure/**",
+        "src/widgets/adviceCard/**"
       ],
-      "sha": "884ae1c7",
-      "summary": "Алгоритм совета и его реализация: чтение экспопары из EXIF (exifr lite, статусы ошибок), EV сцены с поправкой устройства, кламп выдержки, штрафы, вспышка, классы камер, эталонный прогон Lomo'Instant Wide; API, решения, коды rationale и предупреждений, тесты.",
+      "sha": "ae394a80",
+      "summary": "Алгоритм совета и его реализация: чтение EXIF, EV с поправкой устройства, кламп выдержки, штрафы, вспышка, классы камер, эталонный прогон; API и решения, коды rationale и предупреждений, тесты; карточка совета: состояния adviceAtom, состав карточки, тексты.",
       "keywords": [
         "движок",
         "алгоритм",
         "ev",
         "exif",
         "exifr",
-        "heic",
         "экспозиция",
         "выдержка",
         "диафрагма",
@@ -146,8 +148,10 @@
         "recommend",
         "эталон",
         "rationale",
-        "sceneEv100",
-        "readExposure"
+        "предупреждения",
+        "карточка совета",
+        "adviceCard",
+        "adviceAtom"
       ]
     },
     {
@@ -186,8 +190,8 @@
       "path": "docs/risks.md",
       "title": "Риски и открытые вопросы",
       "codePaths": [],
-      "sha": "1590317b",
-      "summary": "Риски проекта и способы их снятия; открытые вопросы (ISO ведущего числа Lomo, широта плёнок, коррекция против смаза, дистанция для вспышки, вспышка Fujifilm, контраст контролов HeroUI на солнце, хостинг) и закрытые решения.",
+      "sha": "be199800",
+      "summary": "Риски проекта и способы их снятия; открытые вопросы (ISO ведущего числа Lomo, широта плёнок, коррекция против смаза, дистанция для вспышки и зоны фокусировки, вспышка Fujifilm, контраст контролов HeroUI, хостинг) и закрытые решения.",
       "keywords": [
         "риски",
         "открытые вопросы",
@@ -197,8 +201,9 @@
         "калибровка",
         "хостинг",
         "штрафы",
-        "контраст",
-        "nd-фильтр"
+        "дистанция",
+        "зона фокусировки",
+        "контраст"
       ]
     },
     {

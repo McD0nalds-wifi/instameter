@@ -6,6 +6,7 @@ import { useAtomValue } from 'jotai';
 import { currentMeasurementAtom, MeasurementSummary } from '@/entities/measurement';
 import { MeasureScene } from '@/features/measureScene';
 import { strings } from '@/shared/config';
+import { AdviceCard } from '@/widgets/adviceCard';
 
 export const MeasurePage: FC = () => {
   const measurement = useAtomValue(currentMeasurementAtom);
@@ -19,6 +20,7 @@ export const MeasurePage: FC = () => {
         <Paragraph className="text-muted">{strings.measurePage.placeholder}</Paragraph>
       )}
       <MeasureScene />
+      <AdviceCard />
     </section>
   );
 };
