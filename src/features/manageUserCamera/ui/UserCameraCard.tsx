@@ -4,6 +4,7 @@ import type { FC } from 'react';
 import { Button, Card, Chip } from '@heroui/react';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { Trash2 } from 'lucide-react';
+import { useState } from 'react';
 
 import { FilmSelector } from './filmSelector/FilmSelector';
 
@@ -29,8 +30,11 @@ export const UserCameraCard: FC<UserCameraCardProps> = ({ camera }) => {
   const spec = resolveCameraSpec(camera);
   const isActive = activeCamera?.id === camera.id;
   const filmIds = spec?.filmIds ?? [camera.loadedFilmId];
+  const [isConfirmingRemove, setIsConfirmingRemove] = useState(false);
 
   const makeActive = () => void setActiveCamera(camera.id);
+  const askToRemove = () => setIsConfirmingRemove(true);
+  const cancelRemove = () => setIsConfirmingRemove(false);
   const remove = () => void removeCamera(camera.id);
   const changeFilm = (loadedFilmId: string) => void updateCamera({ ...camera, loadedFilmId });
 
@@ -46,7 +50,8 @@ export const UserCameraCard: FC<UserCameraCardProps> = ({ camera }) => {
           isIconOnly
           className="min-h-11 min-w-11"
           aria-label={`${strings.userCamera.remove} ${camera.nickname}`}
-          onPress={remove}
+          isDisabled={isConfirmingRemove}
+          onPress={askToRemove}
         >
           <Trash2 aria-hidden size={18} />
         </Button>
@@ -65,12 +70,23 @@ export const UserCameraCard: FC<UserCameraCardProps> = ({ camera }) => {
           </Chip>
         )}
       </Card.Content>
-      <Card.Footer>
-        {isActive ? (
+      <Card.Footer className="flex flex-wrap gap-2">
+        {isConfirmingRemove && (
+          <>
+            <Button variant="danger" className="min-h-11" onPress={remove}>
+              {strings.userCamera.confirmRemove}
+            </Button>
+            <Button variant="tertiary" className="min-h-11" onPress={cancelRemove}>
+              {strings.userCamera.cancelRemove}
+            </Button>
+          </>
+        )}
+        {!isConfirmingRemove && isActive && (
           <Chip color="accent" variant="primary">
             {strings.userCamera.active}
           </Chip>
-        ) : (
+        )}
+        {!isConfirmingRemove && !isActive && (
           <Button variant="secondary" className="min-h-11" onPress={makeActive}>
             {strings.userCamera.makeActive}
           </Button>

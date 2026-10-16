@@ -41,6 +41,8 @@ Wide 400 — Lv 10,5–15, Mini 12 — Lv 5,0–14,5.
 - У Polaroid I-2 ведущее число в спеке не указано. `guideNumber: 20` при ISO 640 выведено
   из «2,5 м при f/8» (2,5 × 8).
 - У камер Fujifilm вместо ведущего числа указан рабочий диапазон вспышки (`flash.range`).
+- Резьба под фильтр — поле `filterThread`: 49 мм у Lomo'Instant Wide и Polaroid I-2, 43 мм
+  у Lomo'Instant Automat, у Instax её нет.
 - Экспокоррекция I-2 в спецификации не описана, поэтому `exposureCompensation: []`. Для движка
   это не потеря: у I-2 есть ручной режим.
 

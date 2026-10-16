@@ -48,6 +48,7 @@ type CameraSpec = {
   };
   focusZones?: (DistanceRange & { label: string })[];
   meteringRange?: { minLv: number; maxLv: number; iso: number };
+  filterThread?: number;
   notes?: string;
   sourceUrl?: string;
 };
@@ -72,6 +73,8 @@ type CameraSpec = {
 - `max: null` в дистанциях — бесконечность: JSON не умеет хранить `Infinity`.
 - `meteringRange` — рабочий диапазон автоматики в Lv при указанном ISO. Для пересчёта
   в EV₁₀₀: `EV₁₀₀ = Lv − log₂(ISO / 100)`.
+- `filterThread` — диаметр резьбы под фильтр на объективе в миллиметрах. Есть — карточка
+  совета при пересвете предлагает ND-фильтр этого размера; нет — не предлагает.
 - `sourceUrl` необязателен в схеме: камера, заведённая вручную (FR-05), источника не имеет.
   Для каталога его наличие требует тест.
 

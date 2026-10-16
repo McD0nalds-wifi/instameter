@@ -6,6 +6,7 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import { Plus } from 'lucide-react';
 import { useLocation } from 'wouter';
 
+import { currentMeasurementAtom } from '@/entities/measurement';
 import {
   addUserCameraAtom,
   createUserCameraFromSpec,
@@ -20,15 +21,16 @@ type AddCameraButtonProps = {
 export const AddCameraButton: FC<AddCameraButtonProps> = ({ spec }) => {
   const cameras = useAtomValue(userCamerasAtom);
   const addCamera = useSetAtom(addUserCameraAtom);
+  const measurement = useAtomValue(currentMeasurementAtom);
   const [, navigate] = useLocation();
   const isAdded = cameras.some(({ specId }) => specId === spec.id);
 
-  const addAndOpenMyCameras = async () => {
+  const addAndContinue = async () => {
     await addCamera(createUserCameraFromSpec(spec));
-    navigate(paths.myCameras);
+    navigate(measurement ? paths.measure : paths.myCameras);
   };
 
-  const handlePress = () => void addAndOpenMyCameras();
+  const handlePress = () => void addAndContinue();
 
   return (
     <Button variant="secondary" className="min-h-11" isDisabled={isAdded} onPress={handlePress}>

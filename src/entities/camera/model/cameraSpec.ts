@@ -100,6 +100,7 @@ export const CameraSpecSchema = v.pipe(
     flash: FlashSpecSchema,
     focusZones: v.optional(v.array(FocusZoneSchema)),
     meteringRange: v.optional(MeteringRangeSchema),
+    filterThread: v.optional(positiveNumberSchema),
     notes: v.optional(nonEmptyStringSchema),
     sourceUrl: v.optional(urlSchema),
   }),

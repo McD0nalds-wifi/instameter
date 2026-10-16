@@ -9,8 +9,11 @@ export type ErrorMessage = {
   description: string;
 };
 
+const joinWithAnd = (items: string[]) =>
+  items.length > 1 ? `${items.slice(0, -1).join(', ')} и ${items.at(-1)}` : (items[0] ?? '');
+
 const listMissingFields = (failure: Extract<MeasureFailure, { status: 'missing-fields' }>) =>
-  failure.missing.map((field) => strings.measure.fields[field]).join(', ');
+  joinWithAnd(failure.missing.map((field) => strings.measure.fields[field]));
 
 export const errorMessage = (failure: MeasureFailure, isIos: boolean): ErrorMessage => {
   const { errors } = strings.measure;
@@ -18,7 +21,7 @@ export const errorMessage = (failure: MeasureFailure, isIos: boolean): ErrorMess
   if (failure.status === 'missing-fields') {
     return {
       title: errors.missingFieldsTitle,
-      description: `${errors.missingFieldsDescription}: ${listMissingFields(failure)}.`,
+      description: `${errors.missingFieldsDescription} ${listMissingFields(failure)}. ${errors.missingFieldsAdvice}`,
     };
   }
   if (failure.status === 'unreadable') {

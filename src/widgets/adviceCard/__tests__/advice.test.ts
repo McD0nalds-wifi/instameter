@@ -75,10 +75,10 @@ describe('adviceAtom', () => {
 
 describe('тексты совета', () => {
   it('склоняет ступени и округляет до десятых', () => {
-    expect(describeStops(1)).toBe('1 ступень');
-    expect(describeStops(2.12)).toBe('2,1 ступени');
-    expect(describeStops(5)).toBe('5 ступеней');
-    expect(describeStops(-0.91)).toBe('0,9 ступени');
+    expect(describeStops(1)).toBe('1\u00A0ступень');
+    expect(describeStops(2.12)).toBe('2,1\u00A0ступени');
+    expect(describeStops(5)).toBe('5\u00A0ступеней');
+    expect(describeStops(-0.91)).toBe('0,9\u00A0ступени');
   });
 
   it('показывает только те настройки, которые на камере есть', () => {
@@ -97,34 +97,58 @@ describe('тексты совета', () => {
     ]);
   });
 
-  it('говорит о пересвете прямо и с величиной', () => {
-    const advice = buildAdvice(measurementAt(16), lomoWide);
-    const warnings =
-      advice.kind === 'ready' ? describeWarnings(advice.recommendation.warnings) : [];
+  const warningsOf = (advice: ReturnType<typeof buildAdvice>) =>
+    advice.kind === 'ready'
+      ? describeWarnings(advice.recommendation.warnings, {
+          residualError: advice.recommendation.residualError,
+          filterThread: advice.filterThread,
+          flashControllable: advice.flashControllable,
+        })
+      : [];
 
-    expect(warnings).toEqual([
-      expect.objectContaining({
+  it('говорит о пересвете прямо, с величиной и с действием', () => {
+    expect(warningsOf(buildAdvice(measurementAt(16), lomoWide))).toEqual([
+      {
         kind: 'shutter-ceiling',
         tone: 'warning',
-        title: 'Пересвет на 2,1 ступени',
-      }),
-      expect.objectContaining({
+        title: 'Кадр выйдет светлее нормы на 2,1\u00A0ступени',
+        description:
+          'Даже самой короткой выдержки камеры не хватит. Отойдите в тень или снимайте спиной к солнцу. Поможет и ND-фильтр — затемняющий фильтр на резьбу 49\u00A0мм.',
+      },
+      {
         kind: 'beyond-latitude',
         tone: 'danger',
-        description: 'Ошибка экспозиции больше, чем вытянет плёнка: 2,1 ступени.',
-      }),
+        title: 'Не снимайте: кадр почти наверняка выйдет белым',
+        description:
+          'Ошибка больше, чем вытянет плёнка: 2,1\u00A0ступени. Лучше сменить сюжет или место.',
+      },
     ]);
   });
 
-  it('различает слишком светлую и слишком тёмную сцену для автоматической камеры', () => {
-    const bright = buildAdvice(measurementAt(15), mini12);
-    const dark = buildAdvice(measurementAt(0), mini12);
-    const titles = (advice: typeof bright) =>
-      advice.kind === 'ready'
-        ? describeWarnings(advice.recommendation.warnings).map(({ title }) => title)
-        : [];
+  it('советует ND-фильтр только камере с резьбой под него', () => {
+    const wide400 = createUserCameraFromSpec(findCameraSpec('instax-wide-400')!, 3);
+    const descriptions = warningsOf(buildAdvice(measurementAt(16), wide400)).map(
+      ({ description }) => description,
+    );
 
-    expect(titles(bright)).toContain('Слишком светло для этой камеры');
-    expect(titles(dark)).toContain('Слишком темно для этой камеры');
+    expect(descriptions.join(' ')).not.toContain('ND-фильтр');
+  });
+
+  it('не предлагает включить вспышку, если ею управляет камера', () => {
+    const dark = warningsOf(buildAdvice(measurementAt(0), mini12));
+
+    expect(dark.map(({ title }) => title)).toContain('Для этой камеры здесь слишком темно');
+    expect(dark.find(({ kind }) => kind === 'shutter-floor')?.description).toContain(
+      'вспышка добивает недалеко',
+    );
+    expect(dark.find(({ kind }) => kind === 'beyond-latitude')?.title).toBe(
+      'Не снимайте: кадр почти наверняка выйдет тёмным',
+    );
+  });
+
+  it('различает слишком светлую сцену для автоматической камеры', () => {
+    expect(warningsOf(buildAdvice(measurementAt(15), mini12)).map(({ title }) => title)).toContain(
+      'Для этой камеры здесь слишком светло',
+    );
   });
 });
