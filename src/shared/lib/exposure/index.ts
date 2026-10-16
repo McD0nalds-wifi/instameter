@@ -5,6 +5,7 @@ export {
   equivalentFocalLength,
   handheldShutterLimit,
   predictExposure,
+  programAperture,
   programShutterRange,
   recommend,
 } from './recommend';

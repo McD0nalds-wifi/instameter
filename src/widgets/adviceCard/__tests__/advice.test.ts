@@ -40,7 +40,7 @@ describe('buildAdvice', () => {
       kind: 'ready',
       cameraName: "Lomo'Instant Wide",
       filmName: 'Fujifilm Instax Wide',
-      recommendation: { aperture: 22, rationale: 'least-overexposure' },
+      recommendation: { aperture: null, predictedAperture: 22, rationale: 'least-overexposure' },
     });
   });
 
@@ -68,7 +68,7 @@ describe('adviceAtom', () => {
     );
 
     store.set(activeCameraIdAtom, lomoWide.id);
-    expect(store.get(adviceAtom)).toMatchObject({ recommendation: { aperture: 22 } });
+    expect(store.get(adviceAtom)).toMatchObject({ recommendation: { predictedAperture: 22 } });
 
     store.set(activeCameraIdAtom, mini12.id);
     expect(store.get(adviceAtom)).toMatchObject({
@@ -93,7 +93,6 @@ describe('тексты совета', () => {
 
     expect(lomoAdvice.kind === 'ready' && describeSettings(lomoAdvice)).toEqual([
       { label: 'Режим', value: 'Автоматический', isWide: true },
-      { label: 'Диафрагма', value: 'f/22' },
       { label: 'Коррекция', value: '0' },
       { label: 'Вспышка', value: 'Выключить' },
     ]);
@@ -217,5 +216,22 @@ describe('тексты совета', () => {
 
     expect(daylight.kind === 'ready' && describeNotes(daylight)).toContain(resetsNote);
     expect(evening.kind === 'ready' && describeNotes(evening)).not.toContain(resetsNote);
+  });
+
+  it('у Lomo диафрагму называет в справке: её выбирает камера', () => {
+    const advice = buildAdvice(measurementAt(16), lomoWide);
+
+    expect(advice.kind === 'ready' && describeNotes(advice)[0]).toBe(
+      'Диафрагму и выдержку камера выберет сама — около f/22 и 1/250 с, крутить их не нужно.',
+    );
+  });
+
+  it('напоминает, что коррекция Lomo со вспышкой меняет только фон', () => {
+    const evening = buildAdvice(measurementAt(6), lomoWide);
+
+    expect(evening).toMatchObject({ recommendation: { flash: 'on', exposureCompensation: -1 } });
+    expect(evening.kind === 'ready' && describeNotes(evening)).toContain(
+      'Коррекция меняет только фон — объект осветит вспышка.',
+    );
   });
 });

@@ -8,10 +8,11 @@ export type ShutterMode =
 export type ExposureCamera = {
   focalLength: number;
   apertures: readonly number[];
+  programApertures?: readonly number[];
   effectiveAperture?: number;
   shutter: readonly ShutterMode[];
   exposureCompensation: readonly number[];
-  flash: { canDisable: boolean };
+  flash: { canDisable: boolean; offOnlyAtZeroCompensation?: boolean };
   meteringRange?: { minLv: number; maxLv: number; iso: number };
 };
 
@@ -47,6 +48,7 @@ export type Recommendation = {
   aperture: number | null;
   exposureCompensation: number | null;
   flash: FlashAdvice;
+  predictedAperture: number;
   predictedShutter: number;
   residualError: number;
   blurStops: number;
@@ -124,6 +126,20 @@ export const predictExposure = (
   );
   const correctShutter = idealShutter(ev100, aperture, 0, filmIso);
   return { predictedShutter, residualError: Math.log2(predictedShutter / correctShutter) };
+};
+
+export const programAperture = (
+  ev100: number,
+  apertures: readonly number[],
+  compensation: number,
+  filmIso: number,
+  { fastest }: ShutterRange,
+): number => {
+  const ascending = apertures.toSorted((left, right) => left - right);
+  const fitting = ascending.find(
+    (aperture) => idealShutter(ev100, aperture, compensation, filmIso) >= fastest,
+  );
+  return fitting ?? ascending.at(-1)!;
 };
 
 const exposurePenalty = (residualError: number, latitudeStops: number) => {
@@ -205,11 +221,17 @@ const collectWarnings = (
   return warnings;
 };
 
-const adviseFlash = (camera: ExposureCamera, blurStops: number): FlashAdvice => {
+const adviseFlash = (
+  camera: ExposureCamera,
+  { blurStops, compensation }: Candidate,
+): FlashAdvice => {
   if (!camera.flash.canDisable) {
     return 'camera-decides';
   }
-  return blurStops > FLASH_BLUR_STOPS ? 'on' : 'off';
+  if (blurStops > FLASH_BLUR_STOPS) {
+    return 'on';
+  }
+  return camera.flash.offOnlyAtZeroCompensation && compensation !== 0 ? 'camera-decides' : 'off';
 };
 
 const chooseRationale = (camera: ExposureCamera, best: Candidate): Rationale => {
@@ -263,15 +285,24 @@ export const recommend = (
     };
   };
 
-  const candidates = availableApertures(camera).flatMap((aperture) =>
-    availableCompensations(camera).map((compensation) => evaluate(aperture, compensation)),
-  );
+  const { programApertures } = camera;
+  const candidates = programApertures
+    ? availableCompensations(camera).map((compensation) =>
+        evaluate(
+          programAperture(ev100, programApertures, compensation, film.iso, range),
+          compensation,
+        ),
+      )
+    : availableApertures(camera).flatMap((aperture) =>
+        availableCompensations(camera).map((compensation) => evaluate(aperture, compensation)),
+      );
   const best = pickBest(candidates);
 
   return {
     aperture: camera.apertures.length > 0 ? best.aperture : null,
     exposureCompensation: camera.exposureCompensation.length > 0 ? best.compensation : null,
-    flash: adviseFlash(camera, best.blurStops),
+    flash: adviseFlash(camera, best),
+    predictedAperture: best.aperture,
     predictedShutter: best.predictedShutter,
     residualError: best.residualError,
     blurStops: best.blurStops,

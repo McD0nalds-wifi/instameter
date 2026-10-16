@@ -37,11 +37,13 @@ type CameraSpec = {
   filmIds: string[];
   focalLength: number;
   apertures: number[];
+  programApertures?: number[];
   effectiveAperture?: number;
   shutter: ShutterRange[];
   exposureCompensation: number[];
   flash: {
     canDisable: boolean;
+    offOnlyAtZeroCompensation?: boolean;
     guideNumber?: number;
     guideNumberIso?: number;
     range?: DistanceRange;
@@ -50,7 +52,12 @@ type CameraSpec = {
   meteringRange?: { minLv: number; maxLv: number; iso: number };
   filterThread?: number;
   adviceMode?: 'auto' | 'aperture-priority';
-  adviceReminders?: ('film-type-menu' | 'ev-dial-zero' | 'flash-resets-on')[];
+  adviceReminders?: (
+    | 'film-type-menu'
+    | 'ev-dial-zero'
+    | 'flash-resets-on'
+    | 'compensation-ambient-only'
+  )[];
   compensationLabels?: { value: number; label: string }[];
   notes?: string;
   sourceUrl?: string;
@@ -65,8 +72,11 @@ type CameraSpec = {
   `null` — производитель не указывает; сейчас так у всех плёнок.
 - `focalLength` — фактическое фокусное расстояние в миллиметрах. Эквивалент для порога смаза
   движок считает сам по диагонали `frameSize`.
-- `apertures: []` значит «диафрагма не управляется», тогда фактическое значение лежит
-  в `effectiveAperture`. Схема не пропускает камеру без того и другого.
+- `apertures` — диафрагмы, которые выставляет человек. `apertures: []` — не управляется:
+  тогда либо одна фиксированная `effectiveAperture`, либо `programApertures` — значения,
+  между которыми переключается сама программа камеры (обе Lomo). Схема требует одно из трёх.
+- `flash.offOnlyAtZeroCompensation` — вспышку можно выключить только при нулевой коррекции
+  (Mini 99). Схема не пропускает камеру без того и другого.
 - `shutter` — режимы затвора, доступные одновременно; выдержки в секундах. У `program`
   `fastest` строго меньше `slowest`.
 - `exposureCompensation` — доступные значения в ступенях, включая `0`; `[]` — коррекции нет.
@@ -125,6 +135,7 @@ type Recommendation = {
   aperture: number | null;
   exposureCompensation: number | null;
   flash: 'on' | 'off' | 'camera-decides';
+  predictedAperture: number;
   predictedShutter: number;
   residualError: number;
   blurStops: number;

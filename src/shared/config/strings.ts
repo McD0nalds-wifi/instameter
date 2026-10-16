@@ -64,14 +64,18 @@ export const strings = {
     flash: {
       on: 'Включить',
       off: 'Выключить',
+      'camera-decides': 'Авто',
     },
     notes: {
       shutter: 'Выдержку камера выберет сама — около',
       shutterSuffix: 'крутить её не нужно.',
+      programExposure: 'Диафрагму и выдержку камера выберет сама — около',
+      programExposureSuffix: 'крутить их не нужно.',
       cameraFlash: 'Вспышкой управляет камера.',
       cameraFlashRange: 'Вспышкой управляет камера, она добивает на',
     },
     reminders: {
+      'compensation-ambient-only': 'Коррекция меняет только фон — объект осветит вспышка.',
       'film-type-menu': 'Проверьте в меню камеры тип плёнки — по нему она считает экспозицию.',
       'ev-dial-zero': 'Диск EV на камере держите на 0: совет его уже учитывает.',
       'flash-resets-on':

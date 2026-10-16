@@ -41,7 +41,7 @@
         "src/entities/film/**",
         "src/entities/film/config/**"
       ],
-      "sha": "c3ba4806",
+      "sha": "a5850722",
       "summary": "Каталог камер и плёнок: JSON и схемы, сверенные спеки шести камер и пяти плёнок, раскладка спек по полям (adviceMode, filterThread, напоминания, подписи диска), аудит 16.10.2026 с руководствами и найденной ошибкой модели Lomo, версия каталога, источники.",
       "keywords": [
         "каталог",
@@ -65,7 +65,9 @@
         "adviceReminders",
         "compensationLabels",
         "D−",
-        "меню плёнки"
+        "меню плёнки",
+        "programApertures",
+        "версия 3"
       ]
     },
     {
@@ -92,7 +94,7 @@
         "src/entities/film/model/**",
         "src/shared/api/db/**"
       ],
-      "sha": "de66dff5",
+      "sha": "153548ab",
       "summary": "Типы CameraSpec и FilmSpec со смыслом полей, UserCamera без isActive, Measurement (в памяти до v3), Recommendation как результат движка; настройки appSettings (тема, deviceCorrection, activeCameraId); схема IndexedDB, миграции, валидация.",
       "keywords": [
         "модель данных",
@@ -119,7 +121,10 @@
         "режим камеры",
         "adviceReminders",
         "compensationLabels",
-        "подписи диска"
+        "подписи диска",
+        "programApertures",
+        "offOnlyAtZeroCompensation",
+        "predictedAperture"
       ]
     },
     {
@@ -162,7 +167,7 @@
         "src/shared/lib/exposure/**",
         "src/widgets/adviceCard/**"
       ],
-      "sha": "12c709e4",
+      "sha": "9a4b9053",
       "summary": "Алгоритм совета и его реализация: чтение EXIF (exifr lite, статусы, ограничение iOS на снимки из браузера), EV с поправкой устройства, кламп выдержки, штрафы, вспышка, классы камер, эталонный прогон; API, решения, коды rationale и предупреждений; карточка совета.",
       "keywords": [
         "движок",
@@ -195,7 +200,11 @@
         "прогноз выдержки",
         "ND4",
         "кратность фильтра",
-        "напоминания"
+        "напоминания",
+        "программная диафрагма",
+        "programAperture",
+        "predictedAperture",
+        "lomo"
       ]
     },
     {
@@ -237,7 +246,7 @@
       "path": "docs/risks.md",
       "title": "Риски и открытые вопросы",
       "codePaths": [],
-      "sha": "b3885813",
+      "sha": "28e5bd89",
       "summary": "Риски и открытые вопросы: модель Lomo (камера сама выбирает диафрагму), Mini 99 коррекция и вспышка, коррекция Lomo только на фон, диск EV I-2, ведущие числа, широта плёнок, дистанция, контраст HeroUI, Команда iOS, ImageCapture; список проверок на камере; закрытые решения.",
       "keywords": [
         "риски",
@@ -262,7 +271,9 @@
         "проверить на камере",
         "диафрагма",
         "mini 99",
-        "i-2"
+        "i-2",
+        "допущение",
+        "полевой тест"
       ]
     },
     {

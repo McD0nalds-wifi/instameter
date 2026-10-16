@@ -23,7 +23,7 @@ const renderAdvice = (store = createStore()) => {
 };
 
 describe('AdviceCard', () => {
-  it('на снегу советует f/22 и прямо говорит о пересвете', () => {
+  it('на снегу предупреждает о пересвете, а диафрагму оставляет камере', () => {
     const store = createStore();
     store.set(userCamerasAtom, [createUserCameraFromSpec(findCameraSpec('lomo-instant-wide')!, 1)]);
     store.set(currentMeasurementAtom, { ev100: 16, source: 'exif', confidence: 'high', at: 0 });
@@ -33,10 +33,12 @@ describe('AdviceCard', () => {
     const card = screen.getByLabelText("Совет для Lomo'Instant Wide");
     expect(within(card).getByText("Lomo'Instant Wide")).toBeInTheDocument();
     expect(within(card).getByText('Fujifilm Instax Wide')).toBeInTheDocument();
-    expect(within(card).getByText('f/22')).toBeInTheDocument();
+    expect(within(card).queryByText('Диафрагма')).not.toBeInTheDocument();
     expect(within(card).getByText('Выставьте на камере')).toBeInTheDocument();
     expect(within(card).getByText('Автоматический')).toBeInTheDocument();
-    expect(within(card).getByText(/около 1\/250 с, крутить её не нужно/)).toBeInTheDocument();
+    expect(
+      within(card).getByText(/около f\/22 и 1\/250 с, крутить их не нужно/),
+    ).toBeInTheDocument();
     expect(within(card).getByText(/пересвечен меньше всего/)).toBeInTheDocument();
     expect(within(card).getByText('Кадр выйдет светлее нормы на 2,1 ступени')).toBeInTheDocument();
     expect(

@@ -12,7 +12,7 @@ const isAutomatic = ({ apertures, exposureCompensation }: CameraSpec) =>
   apertures.length === 0 && exposureCompensation.length === 0;
 
 const isPartial = ({ apertures, exposureCompensation }: CameraSpec) =>
-  apertures.length > 0 && exposureCompensation.length > 0;
+  apertures.length === 0 && exposureCompensation.length > 0;
 
 const isManual = ({ apertures }: CameraSpec) => apertures.length > 2;
 
@@ -54,6 +54,7 @@ describe('каталог камер', () => {
 
   it('находит камеру по id', () => {
     expect(findCameraSpec('lomo-instant-wide')?.filmIds).toEqual(['instax-wide']);
+    expect(findCameraSpec('lomo-instant-wide')?.programApertures).toEqual([8, 22]);
     expect(findCameraSpec('unknown')).toBeUndefined();
   });
 });
@@ -62,7 +63,12 @@ describe('CameraSpecSchema', () => {
   const [baseSpec] = cameraCatalog.cameras;
 
   it('отклоняет камеру без диафрагмы и без effectiveAperture', () => {
-    const spec = { ...baseSpec, apertures: [], effectiveAperture: undefined };
+    const spec = {
+      ...baseSpec,
+      apertures: [],
+      effectiveAperture: undefined,
+      programApertures: undefined,
+    };
 
     expect(v.is(CameraSpecSchema, spec)).toBe(false);
   });
