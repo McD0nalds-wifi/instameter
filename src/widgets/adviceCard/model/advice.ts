@@ -17,6 +17,8 @@ export type AdviceState =
       recommendation: Recommendation;
       filterThread?: number;
       flashControllable: boolean;
+      adviceMode?: 'auto' | 'aperture-priority';
+      flashRange?: { min: number; max: number | null };
     };
 
 export const buildAdvice = (
@@ -42,5 +44,7 @@ export const buildAdvice = (
     recommendation: recommend(measurement.ev100, spec, film),
     filterThread: spec.filterThread,
     flashControllable: spec.flash.canDisable,
+    adviceMode: spec.adviceMode,
+    flashRange: spec.flash.range,
   };
 };

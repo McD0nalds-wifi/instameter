@@ -34,7 +34,9 @@ describe('AdviceCard', () => {
     expect(within(card).getByText("Lomo'Instant Wide")).toBeInTheDocument();
     expect(within(card).getByText('Fujifilm Instax Wide')).toBeInTheDocument();
     expect(within(card).getByText('f/22')).toBeInTheDocument();
-    expect(within(card).getByText('1/250 с')).toBeInTheDocument();
+    expect(within(card).getByText('Выставьте на камере')).toBeInTheDocument();
+    expect(within(card).getByText('Автоматический')).toBeInTheDocument();
+    expect(within(card).getByText(/около 1\/250 с, крутить её не нужно/)).toBeInTheDocument();
     expect(within(card).getByText(/пересвечен меньше всего/)).toBeInTheDocument();
     expect(within(card).getByText('Кадр выйдет светлее нормы на 2,1 ступени')).toBeInTheDocument();
     expect(

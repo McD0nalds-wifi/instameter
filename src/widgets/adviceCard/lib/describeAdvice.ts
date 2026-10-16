@@ -1,12 +1,13 @@
 import type { ExposureWarning, Recommendation } from '@/shared/lib/exposure';
 
 import { strings } from '@/shared/config';
-import { formatAperture, formatShutter, formatStops } from '@/shared/lib/format';
+import { formatAperture, formatShutter, formatStops, formatThirds } from '@/shared/lib/format';
 import { pluralize } from '@/shared/lib/plural';
 
 export type SettingRow = {
   label: string;
   value: string;
+  isWide?: boolean;
 };
 
 export type WarningText = {
@@ -25,24 +26,61 @@ export const describeStops = (stops: number): string => {
   return `${formatStops(rounded).replace('+', '')}${NO_BREAK_SPACE}${pluralize(rounded, strings.advice.stops)}`;
 };
 
-export const describeSettings = (recommendation: Recommendation): SettingRow[] => {
-  const { settings, flash } = strings.advice;
+export type AdviceContext = {
+  recommendation: Recommendation;
+  flashControllable: boolean;
+  adviceMode?: 'auto' | 'aperture-priority';
+  flashRange?: { min: number; max: number | null };
+};
+
+const distanceFormat = new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 1 });
+
+const describeDistanceRange = ({ min, max }: { min: number; max: number | null }) =>
+  max === null
+    ? `от ${distanceFormat.format(min)}${NO_BREAK_SPACE}м`
+    : `${distanceFormat.format(min)}–${distanceFormat.format(max)}${NO_BREAK_SPACE}м`;
+
+export const describeSettings = ({
+  recommendation,
+  flashControllable,
+  adviceMode,
+}: AdviceContext): SettingRow[] => {
+  const { settings, flash, modes } = strings.advice;
   const rows: SettingRow[] = [];
 
+  if (adviceMode) {
+    rows.push({ label: settings.mode, value: modes[adviceMode], isWide: true });
+  }
   if (recommendation.aperture !== null) {
     rows.push({ label: settings.aperture, value: formatAperture(recommendation.aperture) });
   }
   if (recommendation.exposureCompensation !== null) {
     rows.push({
       label: settings.compensation,
-      value: formatStops(recommendation.exposureCompensation),
+      value: formatThirds(recommendation.exposureCompensation),
     });
   }
-  rows.push(
-    { label: settings.flash, value: flash[recommendation.flash] },
-    { label: settings.shutter, value: formatShutter(recommendation.predictedShutter) },
-  );
+  if (flashControllable && recommendation.flash !== 'camera-decides') {
+    rows.push({ label: settings.flash, value: flash[recommendation.flash] });
+  }
   return rows;
+};
+
+export const describeNotes = ({
+  recommendation,
+  flashControllable,
+  flashRange,
+}: AdviceContext): string[] => {
+  const { notes } = strings.advice;
+  const shutter = `${notes.shutter} ${formatShutter(recommendation.predictedShutter)}, ${notes.shutterSuffix}`;
+
+  if (flashControllable) {
+    return [shutter];
+  }
+  const flashNote = flashRange
+    ? `${notes.cameraFlashRange} ${describeDistanceRange(flashRange)}.`
+    : notes.cameraFlash;
+  return [shutter, flashNote];
 };
 
 export const describeRationale = ({ rationale }: Recommendation): string =>

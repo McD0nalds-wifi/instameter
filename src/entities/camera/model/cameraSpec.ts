@@ -101,6 +101,7 @@ export const CameraSpecSchema = v.pipe(
     focusZones: v.optional(v.array(FocusZoneSchema)),
     meteringRange: v.optional(MeteringRangeSchema),
     filterThread: v.optional(positiveNumberSchema),
+    adviceMode: v.optional(v.picklist(['auto', 'aperture-priority'])),
     notes: v.optional(nonEmptyStringSchema),
     sourceUrl: v.optional(urlSchema),
   }),

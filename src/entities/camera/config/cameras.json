@@ -57,7 +57,8 @@
       ],
       "notes": "Синхроконтакт PC. Режим 1/30 рассчитан на вспышку и студийный свет. ISO, для которого указано ведущее число, производитель не называет.",
       "sourceUrl": "https://microsites.lomography.com/lomo-instant-wide-camera/technical-information",
-      "filterThread": 49
+      "filterThread": 49,
+      "adviceMode": "auto"
     },
     {
       "id": "lomo-instant-automat",
@@ -110,7 +111,8 @@
       ],
       "notes": "ISO, для которого указано ведущее число, производитель не называет.",
       "sourceUrl": "https://microsites.lomography.com/lomo-instant-automat/technical/",
-      "filterThread": 43
+      "filterThread": 43,
+      "adviceMode": "auto"
     },
     {
       "id": "polaroid-i-2",
@@ -157,7 +159,8 @@
       ],
       "notes": "Режимы: авто, приоритет диафрагмы, приоритет выдержки, ручной. Ведущее число выведено из «2,5 м при f/8» для плёнки ISO 640. Есть синхроконтакт.",
       "sourceUrl": "https://support.polaroid.com/hc/article_attachments/13261628055954",
-      "filterThread": 49
+      "filterThread": 49,
+      "adviceMode": "aperture-priority"
     },
     {
       "id": "instax-mini-99",

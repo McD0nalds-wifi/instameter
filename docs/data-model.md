@@ -49,6 +49,7 @@ type CameraSpec = {
   focusZones?: (DistanceRange & { label: string })[];
   meteringRange?: { minLv: number; maxLv: number; iso: number };
   filterThread?: number;
+  adviceMode?: 'auto' | 'aperture-priority';
   notes?: string;
   sourceUrl?: string;
 };
@@ -75,6 +76,10 @@ type CameraSpec = {
   в EV₁₀₀: `EV₁₀₀ = Lv − log₂(ISO / 100)`.
 - `filterThread` — диаметр резьбы под фильтр на объективе в миллиметрах. Есть — карточка
   совета при пересвете предлагает ND-фильтр этого размера; нет — не предлагает.
+- `adviceMode` — в какой режим перевести камеру, чтобы совет был верным: движок считает,
+  что выдержку выбирает автоматика. `auto` — у Lomo (не 1/30 и не B), `aperture-priority` —
+  у Polaroid I-2 (диафрагму задаёт совет, выдержку — камера). У Instax поля нет: режим не
+  переключается.
 - `sourceUrl` необязателен в схеме: камера, заведённая вручную (FR-05), источника не имеет.
   Для каталога его наличие требует тест.
 

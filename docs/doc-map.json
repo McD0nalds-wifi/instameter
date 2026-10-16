@@ -41,7 +41,7 @@
         "src/entities/film/**",
         "src/entities/film/config/**"
       ],
-      "sha": "87a4db05",
+      "sha": "c3ac32d7",
       "summary": "Каталог камер и плёнок: где лежат JSON и схемы, сверенные спеки шести камер и пяти плёнок, раскладка спек по полям, отличия от SDLC (Lomo Wide 1/250), версия каталога, источники.",
       "keywords": [
         "каталог",
@@ -57,7 +57,9 @@
         "@x",
         "filterThread",
         "резьба",
-        "nd-фильтр"
+        "nd-фильтр",
+        "adviceMode",
+        "режим"
       ]
     },
     {
@@ -84,7 +86,7 @@
         "src/entities/film/model/**",
         "src/shared/api/db/**"
       ],
-      "sha": "b1e5e73b",
+      "sha": "f84fc54e",
       "summary": "Типы CameraSpec и FilmSpec со смыслом полей, UserCamera без isActive, Measurement (в памяти до v3), Recommendation как результат движка; настройки appSettings (тема, deviceCorrection, activeCameraId); схема IndexedDB, миграции, валидация.",
       "keywords": [
         "модель данных",
@@ -106,7 +108,9 @@
         "installHintDismissed",
         "степпер",
         "filterThread",
-        "резьба"
+        "резьба",
+        "adviceMode",
+        "режим камеры"
       ]
     },
     {
@@ -149,7 +153,7 @@
         "src/shared/lib/exposure/**",
         "src/widgets/adviceCard/**"
       ],
-      "sha": "5d469fd7",
+      "sha": "0931b676",
       "summary": "Алгоритм совета и его реализация: чтение EXIF (exifr lite, статусы, ограничение iOS на снимки из браузера), EV с поправкой устройства, кламп выдержки, штрафы, вспышка, классы камер, эталонный прогон; API, решения, коды rationale и предупреждений; карточка совета.",
       "keywords": [
         "движок",
@@ -175,7 +179,11 @@
         "webkit",
         "WarningContext",
         "тексты предупреждений",
-        "действие"
+        "действие",
+        "describeScene",
+        "оценка сцены",
+        "выставьте на камере",
+        "прогноз выдержки"
       ]
     },
     {

@@ -1,3 +1,4 @@
+export { describeScene } from './lib/describeScene';
 export { currentMeasurementAtom } from './model/atoms';
 export { createExifMeasurement, MeasurementSchema } from './model/measurement';
 export type { Measurement } from './model/measurement';
