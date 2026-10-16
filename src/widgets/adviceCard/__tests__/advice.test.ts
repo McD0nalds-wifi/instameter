@@ -1,6 +1,11 @@
 import { createStore } from 'jotai';
 
-import { describeSettings, describeStops, describeWarnings } from '../lib/describeAdvice';
+import {
+  describeNotes,
+  describeSettings,
+  describeStops,
+  describeWarnings,
+} from '../lib/describeAdvice';
 import { buildAdvice } from '../model/advice';
 import { adviceAtom } from '../model/atoms';
 
@@ -81,19 +86,44 @@ describe('тексты совета', () => {
     expect(describeStops(-0.91)).toBe('0,9\u00A0ступени');
   });
 
-  it('показывает только те настройки, которые на камере есть', () => {
+  it('просит выставить только то, что на камере крутится, включая режим', () => {
     const lomoAdvice = buildAdvice(measurementAt(16), lomoWide);
-    const miniAdvice = buildAdvice(measurementAt(11), mini12);
+    const polaroid = createUserCameraFromSpec(findCameraSpec('polaroid-i-2')!, 3);
+    const polaroidAdvice = buildAdvice(measurementAt(12), polaroid);
 
-    expect(lomoAdvice.kind === 'ready' && describeSettings(lomoAdvice.recommendation)).toEqual([
+    expect(lomoAdvice.kind === 'ready' && describeSettings(lomoAdvice)).toEqual([
+      { label: 'Режим', value: 'Автоматический', isWide: true },
       { label: 'Диафрагма', value: 'f/22' },
       { label: 'Коррекция', value: '0' },
       { label: 'Вспышка', value: 'Выключить' },
-      { label: 'Камера выберет выдержку', value: '1/250 с' },
     ]);
-    expect(miniAdvice.kind === 'ready' && describeSettings(miniAdvice.recommendation)).toEqual([
-      { label: 'Вспышка', value: 'Решает камера' },
-      { label: 'Камера выберет выдержку', value: '1/102 с' },
+    expect(polaroidAdvice.kind === 'ready' && describeSettings(polaroidAdvice)[0]).toEqual({
+      label: 'Режим',
+      value: 'Приоритет диафрагмы',
+      isWide: true,
+    });
+  });
+
+  it('показывает коррекцию в третях ступени, как на шкале камеры', () => {
+    const lomoAdvice = buildAdvice(measurementAt(16), lomoWide);
+
+    expect(lomoAdvice.kind).toBe('ready');
+    if (lomoAdvice.kind === 'ready') {
+      const withThirds = {
+        ...lomoAdvice,
+        recommendation: { ...lomoAdvice.recommendation, exposureCompensation: -5 / 3 },
+      };
+      expect(describeSettings(withThirds)).toContainEqual({ label: 'Коррекция', value: '−1 2/3' });
+    }
+  });
+
+  it('у автоматической камеры нечего выставлять, выдержка и вспышка — справка', () => {
+    const miniAdvice = buildAdvice(measurementAt(11), mini12);
+
+    expect(miniAdvice.kind === 'ready' && describeSettings(miniAdvice)).toEqual([]);
+    expect(miniAdvice.kind === 'ready' && describeNotes(miniAdvice)).toEqual([
+      'Выдержку камера выберет сама — около 1/102 с, крутить её не нужно.',
+      'Вспышкой управляет камера, она добивает на 0,3–2,2\u00A0м.',
     ]);
   });
 

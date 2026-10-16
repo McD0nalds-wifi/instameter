@@ -50,16 +50,26 @@ export const strings = {
     noCameraAction: 'Открыть каталог',
     unsupportedTitle: 'Для этой камеры совет пока не считается',
     unsupportedDescription: 'У камеры нет автоматического режима выдержки.',
+    setOnCamera: 'Выставьте на камере',
     settings: {
+      mode: 'Режим',
       aperture: 'Диафрагма',
       compensation: 'Коррекция',
       flash: 'Вспышка',
-      shutter: 'Камера выберет выдержку',
+    },
+    modes: {
+      auto: 'Автоматический',
+      'aperture-priority': 'Приоритет диафрагмы',
     },
     flash: {
       on: 'Включить',
       off: 'Выключить',
-      'camera-decides': 'Решает камера',
+    },
+    notes: {
+      shutter: 'Выдержку камера выберет сама — около',
+      shutterSuffix: 'крутить её не нужно.',
+      cameraFlash: 'Вспышкой управляет камера.',
+      cameraFlashRange: 'Вспышкой управляет камера, она добивает на',
     },
     rationale: {
       exact: 'Экспозиция точная, выдержка достаточно короткая для съёмки с рук.',
@@ -97,7 +107,19 @@ export const strings = {
     },
     stops: { one: 'ступень', few: 'ступени', many: 'ступеней', other: 'ступени' },
   },
+  scene: {
+    snow: 'Снег или пляж в яркий полдень',
+    brightSun: 'Яркое солнце',
+    hazySun: 'Солнце в лёгкой дымке',
+    lightClouds: 'Лёгкая облачность',
+    overcast: 'Пасмурно',
+    deepShade: 'Глубокая тень или густые тучи',
+    twilight: 'Сумерки',
+    eveningRoom: 'Комната вечером',
+    dark: 'Очень темно',
+  },
   measurement: {
+    brightness: 'Яркость сцены',
     ev100: 'EV₁₀₀',
     phoneBias: 'экспокоррекция на телефоне',
   },
