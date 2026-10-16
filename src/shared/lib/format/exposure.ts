@@ -19,3 +19,21 @@ export const formatShutter = (seconds: number): string => {
   }
   return `1/${Math.round(1 / seconds)} с`;
 };
+
+const formatWholeAndThirds = (whole: number, thirds: number) => {
+  if (whole === 0) {
+    return `${thirds}/3`;
+  }
+  return thirds === 0 ? `${whole}` : `${whole} ${thirds}/3`;
+};
+
+export const formatThirds = (stops: number): string => {
+  const totalThirds = Math.round(stops * 3);
+
+  if (totalThirds === 0) {
+    return '0';
+  }
+  const sign = totalThirds > 0 ? '+' : '−';
+  const absoluteThirds = Math.abs(totalThirds);
+  return `${sign}${formatWholeAndThirds(Math.floor(absoluteThirds / 3), absoluteThirds % 3)}`;
+};

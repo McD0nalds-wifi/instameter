@@ -28,3 +28,14 @@ export const saveDeviceCorrectionAtom = atom(null, async (get, set, correction: 
   }
   set(deviceCorrectionAtom, correction);
 });
+
+export const installHintDismissedAtom = atom(false);
+
+export const dismissInstallHintAtom = atom(null, async (get, set) => {
+  const db = get(appDbAtom);
+
+  if (db) {
+    await writeSetting(db, 'installHintDismissed', true);
+  }
+  set(installHintDismissedAtom, true);
+});

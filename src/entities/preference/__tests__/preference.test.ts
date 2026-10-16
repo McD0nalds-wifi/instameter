@@ -4,6 +4,8 @@ import { loadAppSettings } from '../api/loadAppSettings';
 import { resolveTheme } from '../lib/resolveTheme';
 import {
   deviceCorrectionAtom,
+  dismissInstallHintAtom,
+  installHintDismissedAtom,
   saveDeviceCorrectionAtom,
   saveThemePreferenceAtom,
   themePreferenceAtom,
@@ -32,6 +34,7 @@ describe('loadAppSettings', () => {
     await expect(loadAppSettings(db)).resolves.toEqual({
       themePreference: 'system',
       deviceCorrection: 0,
+      installHintDismissed: false,
     });
     db.close();
   });
@@ -44,6 +47,7 @@ describe('loadAppSettings', () => {
     await expect(loadAppSettings(db)).resolves.toEqual({
       themePreference: 'system',
       deviceCorrection: 0,
+      installHintDismissed: false,
     });
     expect(warn).toHaveBeenCalledOnce();
 
@@ -64,6 +68,7 @@ describe('saveThemePreferenceAtom', () => {
     await expect(loadAppSettings(db)).resolves.toEqual({
       themePreference: 'dark',
       deviceCorrection: 0,
+      installHintDismissed: false,
     });
     db.close();
   });
@@ -89,6 +94,7 @@ describe('saveDeviceCorrectionAtom', () => {
     await expect(loadAppSettings(db)).resolves.toEqual({
       themePreference: 'system',
       deviceCorrection: -0.5,
+      installHintDismissed: false,
     });
     db.close();
   });
@@ -101,9 +107,24 @@ describe('saveDeviceCorrectionAtom', () => {
     await expect(loadAppSettings(db)).resolves.toEqual({
       themePreference: 'system',
       deviceCorrection: 0,
+      installHintDismissed: false,
     });
 
     warn.mockRestore();
+    db.close();
+  });
+});
+
+describe('dismissInstallHintAtom', () => {
+  it('запоминает, что подсказку про установку закрыли', async () => {
+    const db = await openFreshDb();
+    const store = createStore();
+    store.set(appDbAtom, db);
+
+    await store.set(dismissInstallHintAtom);
+
+    expect(store.get(installHintDismissedAtom)).toBe(true);
+    await expect(loadAppSettings(db)).resolves.toMatchObject({ installHintDismissed: true });
     db.close();
   });
 });

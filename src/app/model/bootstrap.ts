@@ -4,6 +4,7 @@ import { applyTheme, DARK_SCHEME_QUERY } from './theme';
 
 import {
   deviceCorrectionAtom,
+  installHintDismissedAtom,
   loadAppSettings,
   resolveTheme,
   themePreferenceAtom,
@@ -55,6 +56,7 @@ const hydrateSettings = async (store: AppStore) => {
     const settings = await loadAppSettings(db);
     store.set(themePreferenceAtom, settings.themePreference);
     store.set(deviceCorrectionAtom, settings.deviceCorrection);
+    store.set(installHintDismissedAtom, settings.installHintDismissed);
   } catch (error) {
     console.error(
       '[appSettings] не удалось прочитать настройки, взяты значения по умолчанию',
