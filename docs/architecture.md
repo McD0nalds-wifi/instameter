@@ -51,7 +51,7 @@ src/
     settings/           SettingsPage — тема и прочие настройки
   widgets/
     appShell/           оболочка: нижняя навигация, плашки хранилища и обновления
-    (позже) шапка с переключателем активной камеры
+    adviceCard/         карточка совета: замер + активная камера + плёнка → recommend → тексты
   features/
     switchTheme/        выбор темы system / light / dark
     measureScene/       замер: снимок с камеры или из галереи → EXIF → Measurement

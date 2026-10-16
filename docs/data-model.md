@@ -107,17 +107,21 @@ interface Measurement {
   at: number;
 }
 
-interface Recommendation {
+type Recommendation = {
   aperture: number | null;
   exposureCompensation: number | null;
   flash: 'on' | 'off' | 'camera-decides';
-  focusZone?: string;
   predictedShutter: number;
   residualError: number;
-  warnings: Warning[];
-  rationale: string;
-}
+  blurStops: number;
+  warnings: ExposureWarning[];
+  rationale: Rationale;
+};
 ```
+
+`Recommendation` не хранится: это результат движка (`exposure-engine.md`, «Реализация»),
+коды `rationale` и предупреждений превращает в текст карточка совета. Зоны фокусировки в нём
+пока нет — для неё нужна дистанция до объекта (`risks.md`).
 
 `Measurement.source` заводится с первого дня, даже пока значение одно: второй источник
 (сцен-пикер, FR-15) подключается без правок движка.
