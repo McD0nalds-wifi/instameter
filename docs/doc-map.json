@@ -133,7 +133,7 @@
       "codePaths": [
         "src/widgets/appShell/ui/updateBanner/**"
       ],
-      "sha": "bd1be03f",
+      "sha": "7e6026e1",
       "summary": "Хостинг на GitHub Pages и деплой после зелёного CI (deploy.yml, workflow_run, подпапка /instameter/), заблокированные мажоры Dependabot, service worker и precache, манифест и иконки, ловушки base path и iOS, бюджет размера, проверка на телефоне.",
       "keywords": [
         "деплой",
@@ -155,7 +155,12 @@
         "телефон",
         "installHint",
         "установка",
-        "экран домой"
+        "экран домой",
+        "иконка приложения",
+        "icon.svg",
+        "maskable",
+        "apple-touch-icon",
+        "padding"
       ]
     },
     {

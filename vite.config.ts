@@ -66,7 +66,7 @@ export default defineConfig(async ({ mode }) => {
           display: 'standalone',
           orientation: 'portrait',
           theme_color: '#1f6feb',
-          background_color: '#ffffff',
+          background_color: '#2C2C2A',
           scope: base,
           start_url: base,
         },
