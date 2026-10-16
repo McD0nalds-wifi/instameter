@@ -1,9 +1,10 @@
 import type { ThemePreference } from '../model/themePreference';
 import type { AppDb } from '@/shared/api';
 
-import { readSetting } from './settingsRepository';
 import { DEFAULT_DEVICE_CORRECTION, DeviceCorrectionSchema } from '../model/deviceCorrection';
 import { DEFAULT_THEME_PREFERENCE, ThemePreferenceSchema } from '../model/themePreference';
+
+import { readSetting } from '@/shared/api';
 
 export type AppSettings = {
   themePreference: ThemePreference;

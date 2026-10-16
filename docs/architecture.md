@@ -55,15 +55,18 @@ src/
   features/
     switchTheme/        выбор темы system / light / dark
     measureScene/       замер: снимок с камеры или из галереи → EXIF → Measurement
-    (позже) selectCamera, addCustomCamera
+    addCamera/          добавление камеры из каталога в «Мои камеры»
+    manageUserCamera/   карточка своей камеры: активная, заряженная плёнка, удаление
+    (позже) addCustomCamera
   entities/
     preference/         настройки пользователя (тема, поправка устройства): схема, атомы, appSettings
     measurement/        замер сцены: схема, текущий замер в памяти, сводка
-    camera/             каталог камер: схема CameraSpec и cameras.json
+    camera/             каталог камер: схема CameraSpec, cameras.json, карточка модели;
+                        @x/userCamera — спека для своих камер
     film/               каталог плёнок: схема FilmSpec и films.json; @x/camera — для ссылок камер
-    (позже) userCamera
+    userCamera/         свои камеры: схема, IndexedDB, activeCameraId, атомы
   shared/
-    api/db/             обёртка над idb: схема, версии, миграции
+    api/db/             обёртка над idb: схема, версии, миграции, чтение и запись appSettings
     config/             strings.ts — строки интерфейса, routes.ts — пути, env.ts — base роутера
     lib/plural/         склонения через Intl.PluralRules
     lib/format/         числа экспозиции по-русски: EV, ступени, диафрагма, выдержка

@@ -8,6 +8,12 @@ import {
   resolveTheme,
   themePreferenceAtom,
 } from '@/entities/preference';
+import {
+  activeCameraIdAtom,
+  loadActiveCameraId,
+  loadUserCameras,
+  userCamerasAtom,
+} from '@/entities/userCamera';
 import { appDbAtom, openAppDb } from '@/shared/api';
 
 export type AppStore = ReturnType<typeof createStore>;
@@ -18,6 +24,24 @@ const openDbSafely = async () => {
   } catch (error) {
     console.error('[db] не удалось открыть базу, приложение работает без хранилища', error);
     return null;
+  }
+};
+
+const hydrateUserCameras = async (store: AppStore) => {
+  const db = store.get(appDbAtom);
+
+  if (!db) {
+    return;
+  }
+  try {
+    const [cameras, activeCameraId] = await Promise.all([
+      loadUserCameras(db),
+      loadActiveCameraId(db),
+    ]);
+    store.set(userCamerasAtom, cameras);
+    store.set(activeCameraIdAtom, activeCameraId);
+  } catch (error) {
+    console.error('[userCameras] не удалось прочитать камеры, список пуст', error);
   }
 };
 
@@ -42,7 +66,7 @@ const hydrateSettings = async (store: AppStore) => {
 export const bootstrap = async (): Promise<AppStore> => {
   const store = createStore();
   store.set(appDbAtom, await openDbSafely());
-  await hydrateSettings(store);
+  await Promise.all([hydrateSettings(store), hydrateUserCameras(store)]);
 
   const systemPrefersDark = window.matchMedia(DARK_SCHEME_QUERY).matches;
   applyTheme(resolveTheme(store.get(themePreferenceAtom), systemPrefersDark));
