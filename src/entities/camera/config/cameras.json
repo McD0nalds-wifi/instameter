@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "cameras": [
     {
       "id": "lomo-instant-wide",
@@ -55,10 +55,13 @@
           "max": null
         }
       ],
-      "notes": "Синхроконтакт PC. Режим 1/30 рассчитан на вспышку и студийный свет. ISO, для которого указано ведущее число, производитель не называет.",
+      "notes": "Синхроконтакт PC. Режим 1/30 рассчитан на вспышку и студийный свет; в нём и в B диафрагма f/8. Коррекция ±1 работает только в автоматическом режиме и только на окружающий свет. Вспышка включается заново при каждом включении камеры. ISO, для которого указано ведущее число, производитель не называет.",
       "sourceUrl": "https://microsites.lomography.com/lomo-instant-wide-camera/technical-information",
       "filterThread": 49,
-      "adviceMode": "auto"
+      "adviceMode": "auto",
+      "adviceReminders": [
+        "flash-resets-on"
+      ]
     },
     {
       "id": "lomo-instant-automat",
@@ -109,10 +112,13 @@
           "max": null
         }
       ],
-      "notes": "ISO, для которого указано ведущее число, производитель не называет.",
+      "notes": "Коррекция ±1 работает только в автоматическом режиме и только на окружающий свет. Вспышка включается заново при каждом включении камеры. ISO, для которого указано ведущее число, производитель не называет.",
       "sourceUrl": "https://microsites.lomography.com/lomo-instant-automat/technical/",
       "filterThread": 43,
-      "adviceMode": "auto"
+      "adviceMode": "auto",
+      "adviceReminders": [
+        "flash-resets-on"
+      ]
     },
     {
       "id": "polaroid-i-2",
@@ -157,10 +163,14 @@
           "max": null
         }
       ],
-      "notes": "Режимы: авто, приоритет диафрагмы, приоритет выдержки, ручной. Ведущее число выведено из «2,5 м при f/8» для плёнки ISO 640. Есть синхроконтакт.",
+      "notes": "Режимы: авто, приоритет диафрагмы, приоритет выдержки, ручной. Тип плёнки (i-Type, 600, SX-70) выбирается в меню камеры — по нему она считает экспозицию. Диск EV действует во всех режимах, кроме ручного. Ведущее число 20 выведено из «2,5 м при f/8»; что это указано для ISO 640 — наше допущение. Есть синхроконтакт.",
       "sourceUrl": "https://support.polaroid.com/hc/article_attachments/13261628055954",
       "filterThread": 49,
-      "adviceMode": "aperture-priority"
+      "adviceMode": "aperture-priority",
+      "adviceReminders": [
+        "film-type-menu",
+        "ev-dial-zero"
+      ]
     },
     {
       "id": "instax-mini-99",
@@ -219,7 +229,30 @@
         "maxLv": 14.8,
         "iso": 800
       },
-      "sourceUrl": "https://www.fujifilm.com/us/en/consumer/instax/cameras/mini99/specifications"
+      "sourceUrl": "https://www.fujifilm.com/us/en/consumer/instax/cameras/mini99/specifications",
+      "notes": "Коррекция на диске подписана D−, D, N, L, L+. Вспышку можно выключить только при N; по умолчанию она в режиме «Авто». В макрорежиме камера принудительно ставит L.",
+      "compensationLabels": [
+        {
+          "value": -1.6666666666666667,
+          "label": "D−"
+        },
+        {
+          "value": -0.6666666666666666,
+          "label": "D"
+        },
+        {
+          "value": 0,
+          "label": "N"
+        },
+        {
+          "value": 0.6666666666666666,
+          "label": "L"
+        },
+        {
+          "value": 1,
+          "label": "L+"
+        }
+      ]
     },
     {
       "id": "instax-wide-400",
@@ -247,6 +280,11 @@
         }
       },
       "focusZones": [
+        {
+          "label": "Насадка для крупного плана",
+          "min": 0.4,
+          "max": 0.5
+        },
         {
           "label": "0,9–3 м",
           "min": 0.9,
@@ -298,7 +336,7 @@
         },
         {
           "label": "Обычный",
-          "min": 0.3,
+          "min": 0.5,
           "max": null
         }
       ],

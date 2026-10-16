@@ -50,6 +50,8 @@ type CameraSpec = {
   meteringRange?: { minLv: number; maxLv: number; iso: number };
   filterThread?: number;
   adviceMode?: 'auto' | 'aperture-priority';
+  adviceReminders?: ('film-type-menu' | 'ev-dial-zero' | 'flash-resets-on')[];
+  compensationLabels?: { value: number; label: string }[];
   notes?: string;
   sourceUrl?: string;
 };
@@ -80,6 +82,10 @@ type CameraSpec = {
   что выдержку выбирает автоматика. `auto` — у Lomo (не 1/30 и не B), `aperture-priority` —
   у Polaroid I-2 (диафрагму задаёт совет, выдержку — камера). У Instax поля нет: режим не
   переключается.
+- `adviceReminders` — коды напоминаний, которые карточка совета показывает под настройками;
+  тексты — в `strings.ts`. `flash-resets-on` показывается, только когда совет — выключить вспышку.
+- `compensationLabels` — как значения коррекции подписаны на диске камеры (у Mini 99 буквами
+  D−…L+). Есть подпись — карточка пишет «D (−2/3)», нет — только число в третях.
 - `sourceUrl` необязателен в схеме: камера, заведённая вручную (FR-05), источника не имеет.
   Для каталога его наличие требует тест.
 

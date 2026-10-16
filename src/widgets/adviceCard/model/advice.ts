@@ -1,3 +1,4 @@
+import type { CameraSpec } from '@/entities/camera';
 import type { Measurement } from '@/entities/measurement';
 import type { UserCamera } from '@/entities/userCamera';
 import type { Recommendation } from '@/shared/lib/exposure';
@@ -19,6 +20,8 @@ export type AdviceState =
       flashControllable: boolean;
       adviceMode?: 'auto' | 'aperture-priority';
       flashRange?: { min: number; max: number | null };
+      reminders?: NonNullable<CameraSpec['adviceReminders']>;
+      compensationLabels?: NonNullable<CameraSpec['compensationLabels']>;
     };
 
 export const buildAdvice = (
@@ -46,5 +49,7 @@ export const buildAdvice = (
     flashControllable: spec.flash.canDisable,
     adviceMode: spec.adviceMode,
     flashRange: spec.flash.range,
+    reminders: spec.adviceReminders,
+    compensationLabels: spec.compensationLabels,
   };
 };

@@ -26,12 +26,31 @@ export const describeStops = (stops: number): string => {
   return `${formatStops(rounded).replace('+', '')}${NO_BREAK_SPACE}${pluralize(rounded, strings.advice.stops)}`;
 };
 
+type AdviceReminder = 'film-type-menu' | 'ev-dial-zero' | 'flash-resets-on';
+
 export type AdviceContext = {
   recommendation: Recommendation;
   flashControllable: boolean;
   adviceMode?: 'auto' | 'aperture-priority';
   flashRange?: { min: number; max: number | null };
+  reminders?: AdviceReminder[];
+  compensationLabels?: { value: number; label: string }[];
 };
+
+const LABEL_TOLERANCE = 1e-6;
+
+const describeCompensation = (
+  compensation: number,
+  labels: AdviceContext['compensationLabels'],
+): string => {
+  const dialLabel = labels?.find(({ value }) => Math.abs(value - compensation) < LABEL_TOLERANCE);
+  return dialLabel
+    ? `${dialLabel.label} (${formatThirds(compensation)})`
+    : formatThirds(compensation);
+};
+
+const isReminderRelevant = (reminder: AdviceReminder, recommendation: Recommendation) =>
+  reminder !== 'flash-resets-on' || recommendation.flash === 'off';
 
 const distanceFormat = new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 1 });
 
@@ -44,6 +63,7 @@ export const describeSettings = ({
   recommendation,
   flashControllable,
   adviceMode,
+  compensationLabels,
 }: AdviceContext): SettingRow[] => {
   const { settings, flash, modes } = strings.advice;
   const rows: SettingRow[] = [];
@@ -57,7 +77,7 @@ export const describeSettings = ({
   if (recommendation.exposureCompensation !== null) {
     rows.push({
       label: settings.compensation,
-      value: formatThirds(recommendation.exposureCompensation),
+      value: describeCompensation(recommendation.exposureCompensation, compensationLabels),
     });
   }
   if (flashControllable && recommendation.flash !== 'camera-decides') {
@@ -66,21 +86,28 @@ export const describeSettings = ({
   return rows;
 };
 
-export const describeNotes = ({
-  recommendation,
-  flashControllable,
-  flashRange,
-}: AdviceContext): string[] => {
+const describeFlashNote = ({ flashControllable, flashRange }: AdviceContext) => {
   const { notes } = strings.advice;
-  const shutter = `${notes.shutter} ${formatShutter(recommendation.predictedShutter)}, ${notes.shutterSuffix}`;
 
   if (flashControllable) {
-    return [shutter];
+    return;
   }
-  const flashNote = flashRange
+  return flashRange
     ? `${notes.cameraFlashRange} ${describeDistanceRange(flashRange)}.`
     : notes.cameraFlash;
-  return [shutter, flashNote];
+};
+
+export const describeNotes = (context: AdviceContext): string[] => {
+  const { notes, reminders } = strings.advice;
+  const { recommendation } = context;
+  const shutter = `${notes.shutter} ${formatShutter(recommendation.predictedShutter)}, ${notes.shutterSuffix}`;
+  const reminderNotes = (context.reminders ?? [])
+    .filter((reminder) => isReminderRelevant(reminder, recommendation))
+    .map((reminder) => reminders[reminder]);
+
+  return [shutter, describeFlashNote(context), ...reminderNotes].filter(
+    (note): note is string => note !== undefined,
+  );
 };
 
 export const describeRationale = ({ rationale }: Recommendation): string =>
@@ -93,6 +120,12 @@ export type WarningContext = {
 };
 
 const sentence = (...parts: (string | false | undefined)[]) => parts.filter(Boolean).join(' ');
+
+const describeNdFilter = (stops: number, filterThread: number) => {
+  const texts = strings.advice.warnings;
+  const filterStops = Math.max(1, Math.round(stops));
+  return `${texts.ndFilter} ND${2 ** filterStops} ${texts.ndFilterThread} ${filterThread}${NO_BREAK_SPACE}мм — ${texts.ndFilterEffect} ${describeStops(filterStops)}.`;
+};
 
 const describeWarning = (warning: ExposureWarning, context: WarningContext): WarningText => {
   const texts = strings.advice.warnings;
@@ -107,7 +140,7 @@ const describeWarning = (warning: ExposureWarning, context: WarningContext): War
         description: sentence(
           texts.tooBrightDescription,
           context.filterThread !== undefined &&
-            `${texts.ndFilter} ${context.filterThread}${NO_BREAK_SPACE}мм.`,
+            describeNdFilter(warning.stops, context.filterThread),
         ),
       };
     }
