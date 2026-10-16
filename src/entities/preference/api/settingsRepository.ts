@@ -3,7 +3,7 @@ import type { GenericSchema } from 'valibot';
 
 import * as v from 'valibot';
 
-export type SettingKey = 'themePreference';
+export type SettingKey = 'themePreference' | 'deviceCorrection';
 
 export const readSetting = async <TValue>(
   db: AppDb,

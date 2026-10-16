@@ -54,9 +54,11 @@ src/
     (позже) шапка с переключателем активной камеры
   features/
     switchTheme/        выбор темы system / light / dark
-    (позже) measure, selectCamera, addCustomCamera
+    measureScene/       замер: снимок с камеры или из галереи → EXIF → Measurement
+    (позже) selectCamera, addCustomCamera
   entities/
-    preference/         настройки пользователя (тема): схема, атомы, чтение и запись в appSettings
+    preference/         настройки пользователя (тема, поправка устройства): схема, атомы, appSettings
+    measurement/        замер сцены: схема, текущий замер в памяти, сводка
     camera/             каталог камер: схема CameraSpec и cameras.json
     film/               каталог плёнок: схема FilmSpec и films.json; @x/camera — для ссылок камер
     (позже) userCamera
@@ -64,9 +66,11 @@ src/
     api/db/             обёртка над idb: схема, версии, миграции
     config/             strings.ts — строки интерфейса, routes.ts — пути, env.ts — base роутера
     lib/plural/         склонения через Intl.PluralRules
+    lib/format/         числа экспозиции по-русски: EV, ступени, диафрагма, выдержка
+    lib/exif/           чтение экспопары из EXIF снимка (exifr, сборка lite)
     lib/schema/         общие примитивы valibot: положительные числа, slug, URL
     lib/testing/        setupUser для тестов
-    lib/exposure/       (позже) ev, recommend, flash — чистые функции без React
+    lib/exposure/       ev, recommend — чистые функции без React
 ```
 
 В слое `app` нет сегментов `ui` и `providers`: Steiger запрещает UI в `app` и требует

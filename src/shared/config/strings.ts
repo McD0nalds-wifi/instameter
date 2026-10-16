@@ -9,7 +9,31 @@ export const strings = {
   },
   measurePage: {
     title: 'Замер',
-    placeholder: 'Здесь появятся замер по EXIF и карточка совета.',
+    placeholder: 'Сфотографируйте сюжет камерой телефона — приложение посчитает экспозицию сцены.',
+  },
+  measure: {
+    takePhoto: 'Снять',
+    fromGallery: 'Из галереи',
+    reading: 'Читаю снимок…',
+    hint: 'Перед снимком тапните по главному объекту, чтобы телефон замерил по нему.',
+    fields: {
+      exposureTime: 'выдержки',
+      fNumber: 'диафрагмы',
+      iso: 'ISO',
+    },
+    errors: {
+      noExifTitle: 'В снимке нет данных об экспозиции',
+      noExifDescription:
+        'Так бывает со скриншотами и фото, пересланными через мессенджер. Сделайте снимок камерой телефона.',
+      missingFieldsTitle: 'В снимке не хватает данных об экспозиции',
+      missingFieldsDescription: 'Телефон не записал значение',
+      unreadableTitle: 'Не удалось прочитать файл',
+      unreadableDescription: 'Выберите фотографию в формате JPEG или HEIC.',
+    },
+  },
+  measurement: {
+    ev100: 'EV₁₀₀',
+    phoneBias: 'коррекция телефона',
   },
   catalogPage: {
     title: 'Каталог',

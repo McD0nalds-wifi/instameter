@@ -8,8 +8,8 @@
         "src/app/model/**",
         "src/entities/preference/**"
       ],
-      "sha": "fe1a8948",
-      "summary": "Стек и FSD-раскладка проекта, IndexedDB как источник правды и Jotai как кэш, гидратация до первого рендера, base path из VITE_BASE, тема, строки интерфейса.",
+      "sha": "2b6628a2",
+      "summary": "Стек и FSD-раскладка (в том числе measurement, measureScene, lib/exif, lib/format), IndexedDB как источник правды и Jotai как кэш, гидратация до первого рендера, base path из VITE_BASE, тема, строки интерфейса.",
       "keywords": [
         "архитектура",
         "стек",
@@ -21,7 +21,8 @@
         "base path",
         "vite_base",
         "роутинг",
-        "wouter"
+        "wouter",
+        "preference"
       ]
     },
     {
@@ -72,8 +73,8 @@
         "src/entities/film/model/**",
         "src/shared/api/db/**"
       ],
-      "sha": "5703e0d8",
-      "summary": "Типы CameraSpec и FilmSpec со смыслом полей (focalLength, flash.range, meteringRange, latitudeStops null), UserCamera, Measurement, Recommendation; appSettings; схема IndexedDB, миграции, валидация valibot при чтении.",
+      "sha": "9c0c1124",
+      "summary": "Типы CameraSpec и FilmSpec со смыслом полей, UserCamera, Measurement (в памяти до v3), Recommendation; настройки appSettings (тема, deviceCorrection); схема IndexedDB, миграции, валидация valibot при чтении.",
       "keywords": [
         "модель данных",
         "типы",
@@ -81,11 +82,12 @@
         "valibot",
         "CameraSpec",
         "FilmSpec",
+        "Measurement",
         "indexeddb",
         "idb",
         "миграции",
         "appSettings",
-        "userCameras",
+        "deviceCorrection",
         "валидация"
       ]
     },
@@ -119,16 +121,19 @@
       "path": "docs/exposure-engine.md",
       "title": "Движок рекомендаций",
       "codePaths": [
+        "src/shared/lib/exif/**",
         "src/shared/lib/exposure/__tests__/**",
         "src/shared/lib/exposure/**"
       ],
-      "sha": "00330372",
-      "summary": "Алгоритм совета и его реализация в shared/lib/exposure: EV из EXIF, кламп выдержки, штрафы, вспышка, классы камер, эталонный прогон Lomo'Instant Wide; публичный API, решения (широта по умолчанию, порог 1/3, правило вспышки), коды rationale и предупреждений, тесты.",
+      "sha": "884ae1c7",
+      "summary": "Алгоритм совета и его реализация: чтение экспопары из EXIF (exifr lite, статусы ошибок), EV сцены с поправкой устройства, кламп выдержки, штрафы, вспышка, классы камер, эталонный прогон Lomo'Instant Wide; API, решения, коды rationale и предупреждений, тесты.",
       "keywords": [
         "движок",
         "алгоритм",
         "ev",
         "exif",
+        "exifr",
+        "heic",
         "экспозиция",
         "выдержка",
         "диафрагма",
@@ -138,8 +143,8 @@
         "recommend",
         "эталон",
         "rationale",
-        "предупреждения",
-        "sceneEv100"
+        "sceneEv100",
+        "readExposure"
       ]
     },
     {
@@ -161,8 +166,8 @@
       "path": "docs/requirements.md",
       "title": "Требования и план итераций",
       "codePaths": [],
-      "sha": "a9c09a4f",
-      "summary": "Функциональные требования FR-01…FR-21 по итерациям, нефункциональные требования, план итераций с оценками в часах, чеклист того, что заложить сразу.",
+      "sha": "aeb425a7",
+      "summary": "Функциональные требования FR-01…FR-21 по итерациям, нефункциональные требования, план итераций с оценками в часах, чеклист того, что заложить сразу (выполнено).",
       "keywords": [
         "требования",
         "fr",
@@ -219,8 +224,8 @@
       "codePaths": [
         "src/shared/lib/testing/**"
       ],
-      "sha": "6c20d21e",
-      "summary": "Три слоя верификации (юнит, золотой набор EXIF, полевая проверка), офлайн smoke-тест Playwright, правила юнит- и компонентных тестов, команды.",
+      "sha": "6f8d3d94",
+      "summary": "Три слоя верификации (юнит, золотой набор EXIF и синтетические JPEG jpegWithExif, полевая проверка), офлайн smoke-тест Playwright, правила юнит- и компонентных тестов, команды.",
       "keywords": [
         "тесты",
         "vitest",
@@ -229,6 +234,8 @@
         "офлайн",
         "happy-dom",
         "setupUser",
+        "jpegWithExif",
+        "exif",
         "полевой тест",
         "fake-indexeddb"
       ]

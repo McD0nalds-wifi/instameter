@@ -2,7 +2,12 @@ import { createStore } from 'jotai';
 
 import { applyTheme, DARK_SCHEME_QUERY } from './theme';
 
-import { loadAppSettings, resolveTheme, themePreferenceAtom } from '@/entities/preference';
+import {
+  deviceCorrectionAtom,
+  loadAppSettings,
+  resolveTheme,
+  themePreferenceAtom,
+} from '@/entities/preference';
 import { appDbAtom, openAppDb } from '@/shared/api';
 
 export type AppStore = ReturnType<typeof createStore>;
@@ -25,6 +30,7 @@ const hydrateSettings = async (store: AppStore) => {
   try {
     const settings = await loadAppSettings(db);
     store.set(themePreferenceAtom, settings.themePreference);
+    store.set(deviceCorrectionAtom, settings.deviceCorrection);
   } catch (error) {
     console.error(
       '[appSettings] не удалось прочитать настройки, взяты значения по умолчанию',

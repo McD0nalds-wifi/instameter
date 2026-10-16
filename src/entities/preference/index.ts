@@ -1,7 +1,17 @@
 export { loadAppSettings } from './api/loadAppSettings';
 export type { AppSettings } from './api/loadAppSettings';
 export { resolveTheme } from './lib/resolveTheme';
-export { saveThemePreferenceAtom, themePreferenceAtom } from './model/atoms';
+export {
+  deviceCorrectionAtom,
+  saveDeviceCorrectionAtom,
+  saveThemePreferenceAtom,
+  themePreferenceAtom,
+} from './model/atoms';
+export {
+  DEFAULT_DEVICE_CORRECTION,
+  DEVICE_CORRECTION_LIMIT,
+  DeviceCorrectionSchema,
+} from './model/deviceCorrection';
 export {
   DEFAULT_THEME_PREFERENCE,
   isThemePreference,
