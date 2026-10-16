@@ -8,8 +8,8 @@
         "src/app/model/**",
         "src/entities/preference/**"
       ],
-      "sha": "5b0b5653",
-      "summary": "Стек и FSD-раскладка (measurement, userCamera, measureScene, addCamera, manageUserCamera, adviceCard, lib/exif, lib/format), IndexedDB как источник правды и Jotai как кэш, гидратация, base path, тема, строки интерфейса.",
+      "sha": "59703017",
+      "summary": "Стек и FSD-раскладка (measurement, userCamera, measureScene, addCamera, manageUserCamera, adviceCard, lib/exif, lib/format), IndexedDB как источник правды и Jotai как кэш, гидратация, base path и подпапка GitHub Pages, тема, строки интерфейса.",
       "keywords": [
         "архитектура",
         "стек",
@@ -20,6 +20,7 @@
         "bootstrap",
         "base path",
         "vite_base",
+        "github pages",
         "роутинг",
         "wouter",
         "preference",
@@ -102,14 +103,15 @@
       "codePaths": [
         "src/widgets/appShell/ui/updateBanner/**"
       ],
-      "sha": "6a235126",
-      "summary": "Сборка и деплой статики, заблокированные мажоры зависимостей в Dependabot, регистрация service worker и precache, обновление через плашку, манифест и иконки, ловушки base path и iOS, бюджет размера, разработка с телефона по HTTPS.",
+      "sha": "af839100",
+      "summary": "Хостинг на GitHub Pages и деплой после зелёного CI (deploy.yml, workflow_run, подпапка /instameter/), заблокированные мажоры Dependabot, service worker и precache, манифест и иконки, ловушки base path и iOS, бюджет размера, проверка на телефоне.",
       "keywords": [
         "деплой",
+        "хостинг",
+        "github pages",
+        "workflow",
         "сборка",
         "dependabot",
-        "зависимости",
-        "мажоры",
         "pwa",
         "service worker",
         "workbox",
@@ -119,7 +121,8 @@
         "обновление",
         "size-limit",
         "https",
-        "mkcert"
+        "mkcert",
+        "телефон"
       ]
     },
     {
@@ -190,8 +193,8 @@
       "path": "docs/risks.md",
       "title": "Риски и открытые вопросы",
       "codePaths": [],
-      "sha": "be199800",
-      "summary": "Риски проекта и способы их снятия; открытые вопросы (ISO ведущего числа Lomo, широта плёнок, коррекция против смаза, дистанция для вспышки и зоны фокусировки, вспышка Fujifilm, контраст контролов HeroUI, хостинг) и закрытые решения.",
+      "sha": "6b8bccaa",
+      "summary": "Риски проекта и способы их снятия; открытые вопросы (ISO ведущего числа Lomo, широта плёнок, коррекция против смаза, дистанция для вспышки и зоны фокусировки, вспышка Fujifilm, контраст контролов HeroUI) и закрытые решения (Jotai, активная камера, хостинг GitHub Pages).",
       "keywords": [
         "риски",
         "открытые вопросы",
