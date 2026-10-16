@@ -102,6 +102,12 @@ export const CameraSpecSchema = v.pipe(
     meteringRange: v.optional(MeteringRangeSchema),
     filterThread: v.optional(positiveNumberSchema),
     adviceMode: v.optional(v.picklist(['auto', 'aperture-priority'])),
+    adviceReminders: v.optional(
+      v.array(v.picklist(['film-type-menu', 'ev-dial-zero', 'flash-resets-on'])),
+    ),
+    compensationLabels: v.optional(
+      v.array(v.object({ value: v.number(), label: nonEmptyStringSchema })),
+    ),
     notes: v.optional(nonEmptyStringSchema),
     sourceUrl: v.optional(urlSchema),
   }),

@@ -143,7 +143,7 @@ describe('тексты совета', () => {
         tone: 'warning',
         title: 'Кадр выйдет светлее нормы на 2,1\u00A0ступени',
         description:
-          'Даже самой короткой выдержки камеры не хватит. Отойдите в тень или снимайте спиной к солнцу. Поможет и ND-фильтр — затемняющий фильтр на резьбу 49\u00A0мм.',
+          'Даже самой короткой выдержки камеры не хватит. Отойдите в тень или снимайте спиной к солнцу. Поможет и затемняющий фильтр ND4 на резьбу 49\u00A0мм — он убавит свет на 2\u00A0ступени.',
       },
       {
         kind: 'beyond-latitude',
@@ -180,5 +180,42 @@ describe('тексты совета', () => {
     expect(warningsOf(buildAdvice(measurementAt(15), mini12)).map(({ title }) => title)).toContain(
       'Для этой камеры здесь слишком светло',
     );
+  });
+
+  it('у Mini 99 показывает коррекцию так, как она подписана на диске', () => {
+    const mini99 = createUserCameraFromSpec(findCameraSpec('instax-mini-99')!, 4);
+    const advice = buildAdvice(measurementAt(12), mini99);
+
+    expect(advice.kind).toBe('ready');
+    if (advice.kind === 'ready') {
+      const darker = {
+        ...advice,
+        recommendation: { ...advice.recommendation, exposureCompensation: -2 / 3 },
+      };
+      expect(describeSettings(advice)).toContainEqual({ label: 'Коррекция', value: 'N (0)' });
+      expect(describeSettings(darker)).toContainEqual({ label: 'Коррекция', value: 'D (−2/3)' });
+    }
+  });
+
+  it('напоминает про меню плёнки и диск EV у Polaroid I-2', () => {
+    const polaroid = createUserCameraFromSpec(findCameraSpec('polaroid-i-2')!, 5);
+    const advice = buildAdvice(measurementAt(12), polaroid);
+
+    expect(advice.kind === 'ready' && describeNotes(advice)).toEqual(
+      expect.arrayContaining([
+        'Проверьте в меню камеры тип плёнки — по нему она считает экспозицию.',
+        'Диск EV на камере держите на 0: совет его уже учитывает.',
+      ]),
+    );
+  });
+
+  it('напоминает выключить вспышку Lomo, только когда совет — выключить', () => {
+    const resetsNote =
+      'Вспышка включается заново при каждом включении камеры — выключите её кнопкой.';
+    const daylight = buildAdvice(measurementAt(12), lomoWide);
+    const evening = buildAdvice(measurementAt(6), lomoWide);
+
+    expect(daylight.kind === 'ready' && describeNotes(daylight)).toContain(resetsNote);
+    expect(evening.kind === 'ready' && describeNotes(evening)).not.toContain(resetsNote);
   });
 });
