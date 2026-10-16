@@ -1,4 +1,4 @@
-import { formatAperture, formatEv, formatShutter, formatStops } from '../exposure';
+import { formatAperture, formatEv, formatShutter, formatStops, formatThirds } from '../exposure';
 
 describe('форматирование экспозиции', () => {
   it('показывает выдержку дробью или секундами', () => {
@@ -15,5 +15,14 @@ describe('форматирование экспозиции', () => {
     expect(formatStops(-0.7)).toBe('−0,7');
     expect(formatStops(1)).toBe('+1');
     expect(formatStops(0)).toBe('0');
+  });
+
+  it('показывает поправку в третях ступени, как на шкале камеры', () => {
+    expect(formatThirds(0)).toBe('0');
+    expect(formatThirds(1 / 3)).toBe('+1/3');
+    expect(formatThirds(-2 / 3)).toBe('−2/3');
+    expect(formatThirds(1)).toBe('+1');
+    expect(formatThirds(-4 / 3)).toBe('−1 1/3');
+    expect(formatThirds(0.34)).toBe('+1/3');
   });
 });

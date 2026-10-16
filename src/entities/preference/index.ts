@@ -3,6 +3,8 @@ export type { AppSettings } from './api/loadAppSettings';
 export { resolveTheme } from './lib/resolveTheme';
 export {
   deviceCorrectionAtom,
+  dismissInstallHintAtom,
+  installHintDismissedAtom,
   saveDeviceCorrectionAtom,
   saveThemePreferenceAtom,
   themePreferenceAtom,

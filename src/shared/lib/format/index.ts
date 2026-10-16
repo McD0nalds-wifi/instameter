@@ -1,1 +1,1 @@
-export { formatAperture, formatEv, formatShutter, formatStops } from './exposure';
+export { formatAperture, formatEv, formatShutter, formatStops, formatThirds } from './exposure';

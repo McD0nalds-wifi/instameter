@@ -8,7 +8,7 @@
         "src/app/model/**",
         "src/entities/preference/**"
       ],
-      "sha": "ed72add4",
+      "sha": "e0c21398",
       "summary": "Стек и FSD-раскладка (measurement, userCamera, measureScene, addCamera, manageUserCamera, adviceCard, lib/exif, lib/format), IndexedDB как источник правды и Jotai как кэш, гидратация, base path и подпапка GitHub Pages, тема, строки интерфейса.",
       "keywords": [
         "архитектура",
@@ -27,7 +27,10 @@
         "userCamera",
         "adviceCard",
         "platform",
-        "isIosWebKit"
+        "isIosWebKit",
+        "adjustDeviceCorrection",
+        "installHint",
+        "isStandalone"
       ]
     },
     {
@@ -78,7 +81,7 @@
         "src/entities/film/model/**",
         "src/shared/api/db/**"
       ],
-      "sha": "3e4120e5",
+      "sha": "edee713f",
       "summary": "Типы CameraSpec и FilmSpec со смыслом полей, UserCamera без isActive, Measurement (в памяти до v3), Recommendation как результат движка; настройки appSettings (тема, deviceCorrection, activeCameraId); схема IndexedDB, миграции, валидация.",
       "keywords": [
         "модель данных",
@@ -96,7 +99,9 @@
         "миграции",
         "appSettings",
         "deviceCorrection",
-        "валидация"
+        "валидация",
+        "installHintDismissed",
+        "степпер"
       ]
     },
     {
@@ -105,7 +110,7 @@
       "codePaths": [
         "src/widgets/appShell/ui/updateBanner/**"
       ],
-      "sha": "af839100",
+      "sha": "bd1be03f",
       "summary": "Хостинг на GitHub Pages и деплой после зелёного CI (deploy.yml, workflow_run, подпапка /instameter/), заблокированные мажоры Dependabot, service worker и precache, манифест и иконки, ловушки base path и iOS, бюджет размера, проверка на телефоне.",
       "keywords": [
         "деплой",
@@ -124,7 +129,10 @@
         "size-limit",
         "https",
         "mkcert",
-        "телефон"
+        "телефон",
+        "installHint",
+        "установка",
+        "экран домой"
       ]
     },
     {

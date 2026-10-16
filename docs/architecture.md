@@ -54,6 +54,8 @@ src/
     adviceCard/         карточка совета: замер + активная камера + плёнка → recommend → тексты
   features/
     switchTheme/        выбор темы system / light / dark
+    adjustDeviceCorrection/ поправка телефона: степпер с шагом 1/3 ступени
+    installHint/        подсказка про установку на экран «Домой» на iOS
     measureScene/       замер: снимок с камеры или из галереи → EXIF → Measurement
     addCamera/          добавление камеры из каталога в «Мои камеры»
     manageUserCamera/   карточка своей камеры: активная, заряженная плёнка, удаление
@@ -71,7 +73,7 @@ src/
     lib/plural/         склонения через Intl.PluralRules
     lib/format/         числа экспозиции по-русски: EV, ступени, диафрагма, выдержка
     lib/exif/           чтение экспопары из EXIF снимка (exifr, сборка lite)
-    lib/platform/       особенности платформы: isIosWebKit
+    lib/platform/       особенности платформы: isIosWebKit, isStandalone
     lib/schema/         общие примитивы valibot: положительные числа, slug, URL
     lib/testing/        setupUser для тестов
     lib/exposure/       ev, recommend — чистые функции без React
