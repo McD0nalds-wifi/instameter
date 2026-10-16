@@ -13,6 +13,7 @@ import { createExifMeasurement, currentMeasurementAtom } from '@/entities/measur
 import { deviceCorrectionAtom } from '@/entities/preference';
 import { strings } from '@/shared/config';
 import { readExposure } from '@/shared/lib/exif';
+import { isIosWebKit } from '@/shared/lib/platform';
 
 const ACCEPTED_TYPES = ['image/jpeg', 'image/heic', 'image/heif'];
 
@@ -23,6 +24,7 @@ export const MeasureScene: FC = () => {
   const deviceCorrection = useAtomValue(deviceCorrectionAtom);
   const setMeasurement = useSetAtom(currentMeasurementAtom);
   const [status, setStatus] = useState<MeasureStatus>({ kind: 'idle' });
+  const [isIos] = useState(isIosWebKit);
 
   const measureFile = async (file: File) => {
     setStatus({ kind: 'reading' });
@@ -49,28 +51,37 @@ export const MeasureScene: FC = () => {
   return (
     <div className="flex flex-col gap-3">
       <Paragraph size="sm" className="text-muted">
-        {strings.measure.hint}
+        {isIos ? strings.measure.iosHint : strings.measure.hint}
       </Paragraph>
-      <div className="flex gap-2">
-        <FileTrigger
-          acceptedFileTypes={ACCEPTED_TYPES}
-          defaultCamera="environment"
-          onSelect={handleSelect}
-        >
-          <Button variant="primary" className="min-h-11 flex-1" isDisabled={isReading}>
-            <Camera aria-hidden size={18} />
-            {strings.measure.takePhoto}
-          </Button>
-        </FileTrigger>
+      {isIos ? (
         <FileTrigger acceptedFileTypes={ACCEPTED_TYPES} onSelect={handleSelect}>
-          <Button variant="secondary" className="min-h-11 flex-1" isDisabled={isReading}>
+          <Button variant="primary" className="min-h-11" isDisabled={isReading}>
             <Images aria-hidden size={18} />
-            {strings.measure.fromGallery}
+            {strings.measure.choosePhoto}
           </Button>
         </FileTrigger>
-      </div>
+      ) : (
+        <div className="flex gap-2">
+          <FileTrigger
+            acceptedFileTypes={ACCEPTED_TYPES}
+            defaultCamera="environment"
+            onSelect={handleSelect}
+          >
+            <Button variant="primary" className="min-h-11 flex-1" isDisabled={isReading}>
+              <Camera aria-hidden size={18} />
+              {strings.measure.takePhoto}
+            </Button>
+          </FileTrigger>
+          <FileTrigger acceptedFileTypes={ACCEPTED_TYPES} onSelect={handleSelect}>
+            <Button variant="secondary" className="min-h-11 flex-1" isDisabled={isReading}>
+              <Images aria-hidden size={18} />
+              {strings.measure.fromGallery}
+            </Button>
+          </FileTrigger>
+        </div>
+      )}
       {isReading && <Paragraph size="sm">{strings.measure.reading}</Paragraph>}
-      {status.kind === 'failed' && <MeasureError failure={status.failure} />}
+      {status.kind === 'failed' && <MeasureError failure={status.failure} isIos={isIos} />}
     </div>
   );
 };

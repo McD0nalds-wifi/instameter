@@ -71,6 +71,7 @@ src/
     lib/plural/         склонения через Intl.PluralRules
     lib/format/         числа экспозиции по-русски: EV, ступени, диафрагма, выдержка
     lib/exif/           чтение экспопары из EXIF снимка (exifr, сборка lite)
+    lib/platform/       особенности платформы: isIosWebKit
     lib/schema/         общие примитивы valibot: положительные числа, slug, URL
     lib/testing/        setupUser для тестов
     lib/exposure/       ev, recommend — чистые функции без React

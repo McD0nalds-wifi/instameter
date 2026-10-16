@@ -12,7 +12,7 @@ export type ErrorMessage = {
 const listMissingFields = (failure: Extract<MeasureFailure, { status: 'missing-fields' }>) =>
   failure.missing.map((field) => strings.measure.fields[field]).join(', ');
 
-export const errorMessage = (failure: MeasureFailure): ErrorMessage => {
+export const errorMessage = (failure: MeasureFailure, isIos: boolean): ErrorMessage => {
   const { errors } = strings.measure;
 
   if (failure.status === 'missing-fields') {
@@ -23,6 +23,9 @@ export const errorMessage = (failure: MeasureFailure): ErrorMessage => {
   }
   if (failure.status === 'unreadable') {
     return { title: errors.unreadableTitle, description: errors.unreadableDescription };
+  }
+  if (isIos) {
+    return { title: errors.iosNoExifTitle, description: errors.iosNoExifDescription };
   }
   return { title: errors.noExifTitle, description: errors.noExifDescription };
 };

@@ -7,10 +7,11 @@ import { errorMessage } from '../../model/errorMessage';
 
 type MeasureErrorProps = {
   failure: MeasureFailure;
+  isIos: boolean;
 };
 
-export const MeasureError: FC<MeasureErrorProps> = ({ failure }) => {
-  const { title, description } = errorMessage(failure);
+export const MeasureError: FC<MeasureErrorProps> = ({ failure, isIos }) => {
+  const { title, description } = errorMessage(failure, isIos);
 
   return (
     <Alert status="danger">
