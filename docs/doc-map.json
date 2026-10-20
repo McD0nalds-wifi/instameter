@@ -8,7 +8,7 @@
         "src/app/model/**",
         "src/entities/preference/**"
       ],
-      "sha": "e0c21398",
+      "sha": "6e872a59",
       "summary": "Стек и FSD-раскладка (measurement, userCamera, measureScene, addCamera, manageUserCamera, adviceCard, lib/exif, lib/format), IndexedDB как источник правды и Jotai как кэш, гидратация, base path и подпапка GitHub Pages, тема, строки интерфейса.",
       "keywords": [
         "архитектура",
@@ -30,7 +30,9 @@
         "isIosWebKit",
         "adjustDeviceCorrection",
         "installHint",
-        "isStandalone"
+        "isStandalone",
+        "scene",
+        "readPixels"
       ]
     },
     {
@@ -94,7 +96,7 @@
         "src/entities/film/model/**",
         "src/shared/api/db/**"
       ],
-      "sha": "153548ab",
+      "sha": "f169fae6",
       "summary": "Типы CameraSpec и FilmSpec со смыслом полей, UserCamera без isActive, Measurement (в памяти до v3), Recommendation как результат движка; настройки appSettings (тема, deviceCorrection, activeCameraId); схема IndexedDB, миграции, валидация.",
       "keywords": [
         "модель данных",
@@ -124,7 +126,8 @@
         "подписи диска",
         "programApertures",
         "offOnlyAtZeroCompensation",
-        "predictedAperture"
+        "predictedAperture",
+        "meteringBias"
       ]
     },
     {
@@ -170,9 +173,10 @@
         "src/shared/lib/exif/**",
         "src/shared/lib/exposure/__tests__/**",
         "src/shared/lib/exposure/**",
+        "src/shared/lib/scene/**",
         "src/widgets/adviceCard/**"
       ],
-      "sha": "9a4b9053",
+      "sha": "a09fc7f0",
       "summary": "Алгоритм совета и его реализация: чтение EXIF (exifr lite, статусы, ограничение iOS на снимки из браузера), EV с поправкой устройства, кламп выдержки, штрафы, вспышка, классы камер, эталонный прогон; API, решения, коды rationale и предупреждений; карточка совета.",
       "keywords": [
         "движок",
@@ -209,7 +213,12 @@
         "программная диафрагма",
         "programAperture",
         "predictedAperture",
-        "lomo"
+        "lomo",
+        "meteringBias",
+        "поправка замера",
+        "SubjectArea",
+        "пиксели",
+        "экспериментально"
       ]
     },
     {
@@ -251,7 +260,7 @@
       "path": "docs/risks.md",
       "title": "Риски и открытые вопросы",
       "codePaths": [],
-      "sha": "28e5bd89",
+      "sha": "069727a9",
       "summary": "Риски и открытые вопросы: модель Lomo (камера сама выбирает диафрагму), Mini 99 коррекция и вспышка, коррекция Lomo только на фон, диск EV I-2, ведущие числа, широта плёнок, дистанция, контраст HeroUI, Команда iOS, ImageCapture; список проверок на камере; закрытые решения.",
       "keywords": [
         "риски",
@@ -278,7 +287,10 @@
         "mini 99",
         "i-2",
         "допущение",
-        "полевой тест"
+        "полевой тест",
+        "калибровка камеры",
+        "поправка на камеру",
+        "meteringBias"
       ]
     },
     {

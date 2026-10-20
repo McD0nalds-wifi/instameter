@@ -36,6 +36,7 @@ export type AdviceContext = {
   flashRange?: { min: number; max: number | null };
   reminders?: AdviceReminder[];
   hasProgramAperture?: boolean;
+  meteringBias?: number;
   compensationLabels?: { value: number; label: string }[];
 };
 
@@ -106,6 +107,20 @@ const describeFlashNote = ({ flashControllable, flashRange }: AdviceContext) => 
     : notes.cameraFlash;
 };
 
+const describeMeteringNote = ({ meteringBias, recommendation }: AdviceContext) => {
+  if (!meteringBias) {
+    return;
+  }
+  const { metering } = strings.advice;
+  const isDarker = meteringBias < 0;
+  const isCompensated = (recommendation.exposureCompensation ?? 0) !== 0;
+  return [
+    `${isDarker ? metering.darkerSurroundings : metering.lighterSurroundings} ${describeStops(meteringBias)}:`,
+    isDarker ? metering.darkerEffect : metering.lighterEffect,
+    isCompensated ? metering.compensated : metering.notCompensated,
+  ].join(' ');
+};
+
 export const describeNotes = (context: AdviceContext): string[] => {
   const { notes, reminders } = strings.advice;
   const { recommendation } = context;
@@ -117,9 +132,12 @@ export const describeNotes = (context: AdviceContext): string[] => {
     .filter((reminder) => isReminderRelevant(reminder, recommendation))
     .map((reminder) => reminders[reminder]);
 
-  return [shutter, describeFlashNote(context), ...reminderNotes].filter(
-    (note): note is string => note !== undefined,
-  );
+  return [
+    describeMeteringNote(context),
+    shutter,
+    describeFlashNote(context),
+    ...reminderNotes,
+  ].filter((note): note is string => note !== undefined);
 };
 
 export const describeRationale = ({ rationale }: Recommendation): string =>

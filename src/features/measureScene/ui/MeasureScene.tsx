@@ -14,6 +14,7 @@ import { deviceCorrectionAtom } from '@/entities/preference';
 import { strings } from '@/shared/config';
 import { readExposure } from '@/shared/lib/exif';
 import { isIosWebKit } from '@/shared/lib/platform';
+import { estimateMeteringBias, readPixels } from '@/shared/lib/scene';
 
 const ACCEPTED_TYPES = ['image/jpeg', 'image/heic', 'image/heif'];
 
@@ -31,7 +32,11 @@ export const MeasureScene: FC = () => {
     const result = await readExposure(file);
 
     if (result.status === 'ok') {
-      setMeasurement(createExifMeasurement(result.exposure, deviceCorrection));
+      const pixels = await readPixels(file);
+      const estimate = pixels && estimateMeteringBias(pixels, result.subjectRegion);
+      setMeasurement(
+        createExifMeasurement(result.exposure, deviceCorrection, Date.now(), estimate?.biasStops),
+      );
       setStatus({ kind: 'idle' });
       return;
     }

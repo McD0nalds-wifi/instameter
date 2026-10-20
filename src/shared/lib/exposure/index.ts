@@ -8,6 +8,7 @@ export {
   programAperture,
   programShutterRange,
   recommend,
+  significantMeteringBias,
 } from './recommend';
 export type {
   ExposureCamera,

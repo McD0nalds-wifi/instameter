@@ -234,4 +234,21 @@ describe('тексты совета', () => {
       'Коррекция меняет только фон — объект осветит вспышка.',
     );
   });
+
+  it('объясняет, что фон темнее объекта и коррекция это учитывает', () => {
+    const advice = buildAdvice({ ...measurementAt(10.4), meteringBias: -1.1 }, lomoWide);
+
+    expect(advice).toMatchObject({ recommendation: { exposureCompensation: -1 } });
+    expect(advice.kind === 'ready' && describeNotes(advice)[0]).toBe(
+      'Фон темнее объекта примерно на 1,1\u00A0ступени: камера меряет весь кадр и сделает объект светлее. Коррекция в совете это учитывает.',
+    );
+  });
+
+  it('без коррекции на камере советует подойти ближе', () => {
+    const advice = buildAdvice({ ...measurementAt(11), meteringBias: -1 }, mini12);
+
+    expect(advice.kind === 'ready' && describeNotes(advice)[0]).toContain(
+      'подойдите ближе, чтобы объект занял больше кадра',
+    );
+  });
 });

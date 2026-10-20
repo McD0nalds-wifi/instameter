@@ -25,6 +25,7 @@ export type ExposureFilm = {
 export type RecommendOptions = {
   defaultLatitudeStops: number;
   handheld: boolean;
+  meteringBias?: number;
 };
 
 export const DEFAULT_RECOMMEND_OPTIONS: RecommendOptions = {
@@ -72,6 +73,9 @@ const DIFFRACTION_APERTURE = 16;
 const NOTICEABLE_STOPS = 1 / 3;
 const FLASH_BLUR_STOPS = 1;
 
+export const significantMeteringBias = (bias: number | undefined): number =>
+  bias !== undefined && Math.abs(bias) >= NOTICEABLE_STOPS ? bias : 0;
+
 const penaltyWeights = {
   withinLatitude: 10,
   beyondLatitude: 100,
@@ -118,9 +122,10 @@ export const predictExposure = (
   compensation: number,
   filmIso: number,
   { fastest, slowest }: ShutterRange,
+  meteringBias = 0,
 ): PredictedExposure => {
   const predictedShutter = clamp(
-    idealShutter(ev100, aperture, compensation, filmIso),
+    idealShutter(ev100 + meteringBias, aperture, compensation, filmIso),
     fastest,
     slowest,
   );
@@ -261,10 +266,12 @@ export const recommend = (
     throw new Error('Камера без программного режима затвора не поддерживается движком');
   }
   const latitudeStops = film.latitudeStops ?? options.defaultLatitudeStops;
+  const meteringBias = significantMeteringBias(options.meteringBias);
+  const meteredEv = ev100 + meteringBias;
   const blurLimit = handheldShutterLimit(camera, film);
 
   const evaluate = (aperture: number, compensation: number): Candidate => {
-    const exposure = predictExposure(ev100, aperture, compensation, film.iso, range);
+    const exposure = predictExposure(ev100, aperture, compensation, film.iso, range, meteringBias);
     const blurStops = options.handheld
       ? Math.max(0, Math.log2(exposure.predictedShutter / blurLimit))
       : 0;
@@ -289,7 +296,7 @@ export const recommend = (
   const candidates = programApertures
     ? availableCompensations(camera).map((compensation) =>
         evaluate(
-          programAperture(ev100, programApertures, compensation, film.iso, range),
+          programAperture(meteredEv, programApertures, compensation, film.iso, range),
           compensation,
         ),
       )
@@ -306,7 +313,7 @@ export const recommend = (
     predictedShutter: best.predictedShutter,
     residualError: best.residualError,
     blurStops: best.blurStops,
-    warnings: collectWarnings(best, range, latitudeStops, meteringRangeExcess(ev100, camera)),
+    warnings: collectWarnings(best, range, latitudeStops, meteringRangeExcess(meteredEv, camera)),
     rationale: chooseRationale(camera, best),
   };
 };

@@ -5,13 +5,18 @@ export type ExifFixture = {
   fNumber?: Rational;
   iso?: number;
   exposureBias?: Rational;
+  orientation?: number;
+  pixelWidth?: number;
+  pixelHeight?: number;
+  subjectArea?: readonly number[];
 };
 
 type Entry = {
   tag: number;
   type: number;
+  count: number;
   dataSize: number;
-  write: (view: DataView, entryOffset: number, dataOffset: number) => void;
+  write: (view: DataView, valueOffset: number) => void;
 };
 
 const TYPE_SHORT = 3;
@@ -20,63 +25,90 @@ const TYPE_RATIONAL = 5;
 const TYPE_SRATIONAL = 10;
 const ENTRY_SIZE = 12;
 const TIFF_HEADER_SIZE = 8;
+const INLINE_LIMIT = 4;
 
 const rationalEntry = (tag: number, type: number, [numerator, denominator]: Rational): Entry => ({
   tag,
   type,
+  count: 1,
   dataSize: 8,
-  write: (view, entryOffset, dataOffset) => {
-    view.setUint32(entryOffset + 8, dataOffset, true);
-    view.setInt32(dataOffset, numerator, true);
-    view.setInt32(dataOffset + 4, denominator, true);
+  write: (view, valueOffset) => {
+    view.setInt32(valueOffset, numerator, true);
+    view.setInt32(valueOffset + 4, denominator, true);
   },
 });
 
-const shortEntry = (tag: number, value: number): Entry => ({
+const shortsEntry = (tag: number, values: readonly number[]): Entry => ({
   tag,
   type: TYPE_SHORT,
-  dataSize: 0,
-  write: (view, entryOffset) => {
-    view.setUint16(entryOffset + 8, value, true);
+  count: values.length,
+  dataSize: values.length * 2 > INLINE_LIMIT ? values.length * 2 : 0,
+  write: (view, valueOffset) => {
+    values.forEach((value, index) => view.setUint16(valueOffset + index * 2, value, true));
   },
 });
 
-const buildEntries = ({ exposureTime, fNumber, iso, exposureBias }: ExifFixture): Entry[] =>
+const longEntry = (tag: number, value: number): Entry => ({
+  tag,
+  type: TYPE_LONG,
+  count: 1,
+  dataSize: 0,
+  write: (view, valueOffset) => view.setUint32(valueOffset, value, true),
+});
+
+const isEntry = (entry: Entry | undefined): entry is Entry => entry !== undefined;
+
+const buildExifEntries = (fixture: ExifFixture): Entry[] =>
   [
-    exposureTime && rationalEntry(0x82_9a, TYPE_RATIONAL, exposureTime),
-    fNumber && rationalEntry(0x82_9d, TYPE_RATIONAL, fNumber),
-    iso === undefined ? undefined : shortEntry(0x88_27, iso),
-    exposureBias && rationalEntry(0x92_04, TYPE_SRATIONAL, exposureBias),
-  ].filter((entry): entry is Entry => entry !== undefined);
+    fixture.exposureTime && rationalEntry(0x82_9a, TYPE_RATIONAL, fixture.exposureTime),
+    fixture.fNumber && rationalEntry(0x82_9d, TYPE_RATIONAL, fixture.fNumber),
+    fixture.iso === undefined ? undefined : shortsEntry(0x88_27, [fixture.iso]),
+    fixture.exposureBias && rationalEntry(0x92_04, TYPE_SRATIONAL, fixture.exposureBias),
+    fixture.subjectArea && shortsEntry(0x92_14, fixture.subjectArea),
+    fixture.pixelWidth === undefined ? undefined : longEntry(0xa0_02, fixture.pixelWidth),
+    fixture.pixelHeight === undefined ? undefined : longEntry(0xa0_03, fixture.pixelHeight),
+  ].filter(isEntry);
+
+const ifdSize = (entries: Entry[]) => 2 + entries.length * ENTRY_SIZE + 4;
+
+const dataSize = (entries: Entry[]) => entries.reduce((sum, entry) => sum + entry.dataSize, 0);
+
+const writeIfd = (view: DataView, ifdOffset: number, entries: Entry[], dataStart: number) => {
+  view.setUint16(ifdOffset, entries.length, true);
+  entries.forEach(({ tag, type, count, dataSize: size, write }, index) => {
+    const entryOffset = ifdOffset + 2 + index * ENTRY_SIZE;
+    const outOfLineOffset =
+      dataStart + entries.slice(0, index).reduce((sum, entry) => sum + entry.dataSize, 0);
+
+    view.setUint16(entryOffset, tag, true);
+    view.setUint16(entryOffset + 2, type, true);
+    view.setUint32(entryOffset + 4, count, true);
+
+    if (size > 0) {
+      view.setUint32(entryOffset + 8, outOfLineOffset, true);
+      write(view, outOfLineOffset);
+    } else {
+      write(view, entryOffset + 8);
+    }
+  });
+};
 
 const buildTiff = (fixture: ExifFixture): Uint8Array<ArrayBuffer> => {
-  const entries = buildEntries(fixture);
+  const exifEntries = buildExifEntries(fixture);
   const ifd0Offset = TIFF_HEADER_SIZE;
-  const exifIfdOffset = ifd0Offset + 2 + ENTRY_SIZE + 4;
-  const dataStart = exifIfdOffset + 2 + entries.length * ENTRY_SIZE + 4;
-  const view = new DataView(new ArrayBuffer(dataStart + entries.length * 8));
+  const ifd0WithoutPointer: Entry[] =
+    fixture.orientation === undefined ? [] : [shortsEntry(0x01_12, [fixture.orientation])];
+  const ifd0Length = ifdSize([...ifd0WithoutPointer, longEntry(0, 0)]);
+  const exifIfdOffset = ifd0Offset + ifd0Length;
+  const ifd0Entries = [...ifd0WithoutPointer, longEntry(0x87_69, exifIfdOffset)];
+  const exifDataStart = exifIfdOffset + ifdSize(exifEntries);
+  const view = new DataView(new ArrayBuffer(exifDataStart + dataSize(exifEntries)));
 
   view.setUint16(0, 0x49_49, false);
   view.setUint16(2, 42, true);
   view.setUint32(4, ifd0Offset, true);
-
-  view.setUint16(ifd0Offset, 1, true);
-  view.setUint16(ifd0Offset + 2, 0x87_69, true);
-  view.setUint16(ifd0Offset + 4, TYPE_LONG, true);
-  view.setUint32(ifd0Offset + 6, 1, true);
-  view.setUint32(ifd0Offset + 10, exifIfdOffset, true);
-
-  view.setUint16(exifIfdOffset, entries.length, true);
-  entries.forEach(({ tag, type, write }, index) => {
-    const entryOffset = exifIfdOffset + 2 + index * ENTRY_SIZE;
-    const dataOffset =
-      dataStart + entries.slice(0, index).reduce((sum, { dataSize }) => sum + dataSize, 0);
-
-    view.setUint16(entryOffset, tag, true);
-    view.setUint16(entryOffset + 2, type, true);
-    view.setUint32(entryOffset + 4, 1, true);
-    write(view, entryOffset, dataOffset);
-  });
+  writeIfd(view, ifd0Offset, ifd0Entries, exifIfdOffset);
+  writeIfd(view, exifIfdOffset, exifEntries, exifDataStart);
 
   return new Uint8Array(view.buffer);
 };
