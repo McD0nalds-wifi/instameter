@@ -233,3 +233,46 @@ describe('вспышка Instax Mini 99 при коррекции', () => {
     });
   });
 });
+
+describe('поправка на замер камеры по всему кадру', () => {
+  const lomoProgram: ExposureCamera = {
+    ...lomoInstantWide,
+    apertures: [],
+    programApertures: [8, 22],
+  };
+
+  it('светлое лицо на тёмном фоне: камера пересветила бы, совет — коррекция −1', () => {
+    const withoutBias = recommend(10.4, lomoProgram, instaxWide);
+    const withBias = recommend(10.4, lomoProgram, instaxWide, {
+      defaultLatitudeStops: 1,
+      handheld: true,
+      meteringBias: -1,
+    });
+
+    expect(withoutBias.exposureCompensation).toBe(0);
+    expect(withBias.exposureCompensation).toBe(-1);
+    expect(withBias.residualError).toBeCloseTo(0, 1);
+  });
+
+  it('без коррекции на камере предсказывает пересвет объекта', () => {
+    const fixedCamera: ExposureCamera = { ...lomoProgram, exposureCompensation: [] };
+    const result = recommend(10.4, fixedCamera, instaxWide, {
+      defaultLatitudeStops: 1,
+      handheld: true,
+      meteringBias: -1,
+    });
+
+    expect(result.residualError).toBeCloseTo(1, 1);
+  });
+
+  it('мелкую разницу меньше трети ступени не учитывает', () => {
+    const result = recommend(10.4, lomoProgram, instaxWide, {
+      defaultLatitudeStops: 1,
+      handheld: true,
+      meteringBias: -0.2,
+    });
+
+    expect(result.exposureCompensation).toBe(0);
+    expect(result.residualError).toBeCloseTo(0);
+  });
+});

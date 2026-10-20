@@ -5,7 +5,12 @@ import type { Recommendation } from '@/shared/lib/exposure';
 
 import { findFilm } from '@/entities/film';
 import { resolveCameraSpec } from '@/entities/userCamera';
-import { programShutterRange, recommend } from '@/shared/lib/exposure';
+import {
+  DEFAULT_RECOMMEND_OPTIONS,
+  programShutterRange,
+  recommend,
+  significantMeteringBias,
+} from '@/shared/lib/exposure';
 
 export type AdviceState =
   | { kind: 'no-measurement' }
@@ -22,6 +27,7 @@ export type AdviceState =
       flashRange?: { min: number; max: number | null };
       reminders?: NonNullable<CameraSpec['adviceReminders']>;
       hasProgramAperture: boolean;
+      meteringBias: number;
       compensationLabels?: NonNullable<CameraSpec['compensationLabels']>;
     };
 
@@ -45,7 +51,11 @@ export const buildAdvice = (
     kind: 'ready',
     cameraName: camera.nickname,
     filmName: film.name,
-    recommendation: recommend(measurement.ev100, spec, film),
+    recommendation: recommend(measurement.ev100, spec, film, {
+      ...DEFAULT_RECOMMEND_OPTIONS,
+      meteringBias: measurement.meteringBias,
+    }),
+    meteringBias: significantMeteringBias(measurement.meteringBias),
     filterThread: spec.filterThread,
     flashControllable: spec.flash.canDisable,
     adviceMode: spec.adviceMode,

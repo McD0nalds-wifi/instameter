@@ -67,4 +67,20 @@ describe('exposureFromTags', () => {
     expect(exposureFromTags(null)).toEqual({ status: 'no-exif' });
     expect(exposureFromTags({ Make: 'Apple' })).toEqual({ status: 'no-exif' });
   });
+
+  it('возвращает область объекта, если телефон записал SubjectArea', async () => {
+    const result = await readExposure(
+      jpegWithExif({
+        exposureTime: [1, 310],
+        fNumber: [15, 10],
+        iso: 50,
+        orientation: 6,
+        pixelWidth: 4032,
+        pixelHeight: 3024,
+        subjectArea: [2016, 1512, 403, 302],
+      }),
+    );
+
+    expect(result.status === 'ok' && result.subjectRegion?.x).toBeCloseTo(0.45, 2);
+  });
 });

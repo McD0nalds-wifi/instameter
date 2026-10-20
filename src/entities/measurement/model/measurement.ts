@@ -18,6 +18,7 @@ export const MeasurementSchema = v.object({
     }),
   ),
   sceneId: v.optional(slugSchema),
+  meteringBias: v.optional(v.number()),
   at: v.number(),
 });
 
@@ -27,10 +28,12 @@ export const createExifMeasurement = (
   exposure: ExposureSettings,
   deviceCorrection: number,
   at: number = Date.now(),
+  meteringBias?: number,
 ): Measurement => ({
   ev100: sceneEv100(exposure, deviceCorrection),
   source: 'exif',
   confidence: 'high',
   exif: exposure,
+  ...(meteringBias === undefined ? {} : { meteringBias }),
   at,
 });

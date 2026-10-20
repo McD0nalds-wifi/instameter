@@ -1,14 +1,16 @@
 import type { ExposureSettings } from '../exposure';
+import type { Region } from '../scene';
 
 import exifr from 'exifr/dist/lite.esm.mjs';
 import * as v from 'valibot';
 
 import { positiveNumberSchema } from '../schema';
+import { subjectRegionFromTags } from './subjectRegion';
 
 export type ExposureField = 'exposureTime' | 'fNumber' | 'iso';
 
 export type ExifReadResult =
-  | { status: 'ok'; exposure: ExposureSettings }
+  | { status: 'ok'; exposure: ExposureSettings; subjectRegion?: Region }
   | { status: 'no-exif' }
   | { status: 'missing-fields'; missing: ExposureField[] }
   | { status: 'unreadable' };
@@ -56,6 +58,7 @@ export const exposureFromTags = (tags: unknown): ExifReadResult => {
   return {
     status: 'ok',
     exposure: { exposureTime, fNumber, iso, exposureBias: readBias(tags.ExposureCompensation) },
+    subjectRegion: subjectRegionFromTags(tags),
   };
 };
 
