@@ -30,3 +30,24 @@ describe('движок на всём каталоге', () => {
     },
   );
 });
+
+describe('Lomo’Instant Wide Glass', () => {
+  const glass = cameraCatalog.cameras.find(({ id }) => id === 'lomo-instant-wide-glass')!;
+  const instaxWide = filmCatalog.films.find(({ id }) => id === 'instax-wide')!;
+
+  it('отличается от обычной Wide резьбой, зонами фокуса и пределом Bulb', () => {
+    expect(glass.filterThread).toBe(52);
+    expect(glass.focusZones?.map(({ label }) => label)).toEqual(['0,3 м', '0,6 м', '1–2 м', '∞']);
+    expect(glass.shutter).toContainEqual({ kind: 'bulb', maxSeconds: 30 });
+    expect(glass.programApertures).toEqual([8, 22]);
+  });
+
+  it('в тени на EV₁₀₀ 10,4 камера сама выберет f/8 около 1/174 с, коррекция 0', () => {
+    const result = recommend(10.4, glass, instaxWide);
+
+    expect(result.aperture).toBeNull();
+    expect(result.predictedAperture).toBe(8);
+    expect(Math.round(1 / result.predictedShutter)).toBe(169);
+    expect(result.exposureCompensation).toBe(0);
+  });
+});

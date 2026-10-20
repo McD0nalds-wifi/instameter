@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "cameras": [
     {
       "id": "lomo-instant-wide",
@@ -64,6 +64,76 @@
         8,
         22
       ]
+    },
+    {
+      "id": "lomo-instant-wide-glass",
+      "brand": "Lomography",
+      "model": "Lomo'Instant Wide Glass",
+      "filmIds": [
+        "instax-wide"
+      ],
+      "focalLength": 90,
+      "apertures": [],
+      "programApertures": [
+        8,
+        22
+      ],
+      "shutter": [
+        {
+          "kind": "program",
+          "fastest": 0.004,
+          "slowest": 8
+        },
+        {
+          "kind": "fixed",
+          "values": [
+            0.03333333333333333
+          ]
+        },
+        {
+          "kind": "bulb",
+          "maxSeconds": 30
+        }
+      ],
+      "exposureCompensation": [
+        -1,
+        0,
+        1
+      ],
+      "flash": {
+        "canDisable": true,
+        "guideNumber": 13
+      },
+      "focusZones": [
+        {
+          "label": "0,3 м",
+          "min": 0.3,
+          "max": 0.6
+        },
+        {
+          "label": "0,6 м",
+          "min": 0.6,
+          "max": 1
+        },
+        {
+          "label": "1–2 м",
+          "min": 1,
+          "max": 2
+        },
+        {
+          "label": "∞",
+          "min": 2,
+          "max": null
+        }
+      ],
+      "filterThread": 52,
+      "adviceMode": "auto",
+      "adviceReminders": [
+        "flash-resets-on",
+        "compensation-ambient-only"
+      ],
+      "notes": "Стеклянный объектив с просветлением. Отдельный режим f/22 на рычаге фиксирует диафрагму, выдержку 8 с – 1/250 подбирает автоматика. В режимах 1/30 и B диафрагма f/8, B — до 30 с. Коррекция ±1 действует только на окружающий свет и работает в режимах A, 1/30 и f/22, в B не работает. Вспышка включается заново при каждом включении камеры. Синхроконтакт PC. Экспонометр — отдельное окно на корпусе, не через объектив. ISO, для которого указано ведущее число, производитель не называет.",
+      "sourceUrl": "https://downloads.lomography.com/downloads/lomo-instant-wide-glass-manual.pdf"
     },
     {
       "id": "lomo-instant-automat",
